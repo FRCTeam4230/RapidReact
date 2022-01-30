@@ -61,7 +61,7 @@ public class DriveSubsystem extends PIDSubsystem {
   }
 
   public double getAverageEncoderDistance() {
-    return (MG1_Encoder.getPosition() + MG2_Encoder.getPosition()) / 2;
+    return (MG1_Encoder.getPosition() + MG2_Encoder.getPosition()) / 2.0;
   }
 
   public void resetEncoders() {
