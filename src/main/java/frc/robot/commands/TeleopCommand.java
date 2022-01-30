@@ -9,15 +9,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class TeleopCommand extends CommandBase {
-  private DriveSubsystem drivetain;
+  private DriveSubsystem driveSubsystem;
   private final XboxController controller = new XboxController(0);
 
   /** Creates a new TeleopCommand. */
   public TeleopCommand(DriveSubsystem driveSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    drivetain = driveSubsystem;
+    this.driveSubsystem = driveSubsystem;
 
-    addRequirements(drivetain);
+    addRequirements(driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -28,13 +28,13 @@ public class TeleopCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetain.arcadeDrive(controller.getLeftY(), controller.getRightX());
+    driveSubsystem.arcadeDrive(controller.getLeftY(), controller.getRightX());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivetain.stop();
+    driveSubsystem.stop();
   }
 
   // Returns true when the command should end.
