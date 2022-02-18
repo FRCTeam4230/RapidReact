@@ -4,12 +4,18 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveDistance;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ManualClimbCommand;
 import frc.robot.commands.TeleopCommand;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -25,10 +31,23 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final ArmSubsystem armSubsystem = new ArmSubsystem();
+  private final ClimberSubsystem leftClimberSubsystem = new ClimberSubsystem(5, 5);
+  private final ClimberSubsystem rightClimberSubsystem = new ClimberSubsystem(6, 7);
   private final XboxController controller = new XboxController(0);
+  private final XboxController secondController = new XboxController(1);
+
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final DoubleSupplier intakeSupplier = () -> controller.getLeftTriggerAxis()
+      - controller.getRightTriggerAxis();
+  private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem, intakeSupplier);
 
   private final TeleopCommand teleopCommand = new TeleopCommand(driveSubsystem, controller);
+
+  private final ManualClimbCommand lClimbCommand = new ManualClimbCommand(leftClimberSubsystem,
+      secondController::getLeftY);
+  private final ManualClimbCommand rClimbCommand = new ManualClimbCommand(rightClimberSubsystem,
+      secondController::getRightY);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -53,10 +72,15 @@ public class RobotContainer {
 
     makeButton(XboxController.Button.kA, new InstantCommand(driveSubsystem::resetEncoders, driveSubsystem));
 
-    makeButton(XboxController.Button.kX, new InstantCommand(intakeSubsystem::raise, intakeSubsystem));
-    makeButton(XboxController.Button.kY, new InstantCommand(intakeSubsystem::lower, intakeSubsystem));
+    makeButton(XboxController.Button.kX, new InstantCommand(armSubsystem::raise, armSubsystem));
+    makeButton(XboxController.Button.kY, new InstantCommand(armSubsystem::lower, armSubsystem));
 
     CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, teleopCommand);
+
+    CommandScheduler.getInstance().setDefaultCommand(leftClimberSubsystem, lClimbCommand);
+    CommandScheduler.getInstance().setDefaultCommand(rightClimberSubsystem, rClimbCommand);
+
+    CommandScheduler.getInstance().setDefaultCommand(intakeSubsystem, intakeCommand);
   }
 
   private void makeButton(XboxController.Button button, Command command) {
@@ -68,6 +92,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return null;
