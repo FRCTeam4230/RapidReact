@@ -1,0 +1,38 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "SPARK MAX [1]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/ClimberSubsystem": "Subsystem",
+      "/LiveWindow/DriveSubsystem": "Subsystem",
+      "/LiveWindow/IntakeSubsystem": "Subsystem",
+      "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
+      "/LiveWindow/Ungrouped/DigitalInput[0]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
+      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
+      "/SmartDashboard/ClimberSubsystem": "Subsystem",
+      "/SmartDashboard/DriveDistance": "Command",
+      "/SmartDashboard/DriveSubsystem": "Subsystem",
+      "/SmartDashboard/IntakeSubsystem": "Subsystem"
+    }
+  },
+  "NetworkTables": {
+    "SmartDashboard": {
+      "ClimberSubsystem": {
+        "open": true
+      },
+      "open": true
+    }
+  }
+}
