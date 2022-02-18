@@ -13,4 +13,26 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public final class DriveTrain {
+    public static final double motorRotationsToWheelRotations = 1 / 10.71;
+    public static final double wheelRotationsToInches = Math.PI * 6;
+    // public static final double motorRotationsToInches = motorRotationsToWheelRotations * wheelRotationsToInches;
+    public static final double motorRotationsToInches = 100 / 56.17;
+
+    public static final double kP = 0.04;
+    public static final double kI = 0;
+    public static final double kD = 0;
+  }
+
+  public final class Intake {
+    public final class Limits {
+      public static final double up = 1;
+      public static final double down = 1;
+    }
+  }
+
+  public final class ClimberPositions {
+    public static final double high = 1;
+    public static final double low = 1;
+  }
 }

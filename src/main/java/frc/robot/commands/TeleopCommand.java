@@ -10,12 +10,13 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class TeleopCommand extends CommandBase {
   private DriveSubsystem driveSubsystem;
-  private final XboxController controller = new XboxController(0);
+  private final XboxController controller;
 
   /** Creates a new TeleopCommand. */
-  public TeleopCommand(DriveSubsystem driveSubsystem) {
+  public TeleopCommand(DriveSubsystem driveSubsystem, XboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveSubsystem = driveSubsystem;
+    this.controller = controller;
 
     addRequirements(driveSubsystem);
   }
@@ -28,7 +29,7 @@ public class TeleopCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSubsystem.arcadeDrive(controller.getLeftY(), controller.getRightX());
+    driveSubsystem.arcadeDrive(controller.getLeftY() * 0.4, controller.getRightX() * 0.4);
   }
 
   // Called once the command ends or is interrupted.
