@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  private final DriveSubsystem driveSubsystem = new DriveSubsystem(MotorIDs.dirveGroup1, MotorIDs.driveGroup2);
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   private final ClimberSubsystem leftClimberSubsystem = new ClimberSubsystem(MotorIDs.leftClimber,
       DigitalIOIDs.leftClimber);
