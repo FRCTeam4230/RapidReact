@@ -100,7 +100,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void resetEncoders() {
     Stream.of(MG1_Encoder1, MG1_Encoder2, MG2_Encoder1, MG2_Encoder2)
-        .forEach(encoder -> encoder.setPositionConversionFactor(0));
+        .forEach(encoder -> encoder.setPosition(0));
   }
 
   public double getMg1Position() {
@@ -109,6 +109,12 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double getMg2Position() {
     return (MG2_Encoder1.getPosition() + MG2_Encoder2.getPosition()) / 2;
+  }
+
+  public void setRampTime(double time) {
+    for (var motor : motors) {
+      motor.setOpenLoopRampRate(time);
+    }
   }
 
   public void stop() {
