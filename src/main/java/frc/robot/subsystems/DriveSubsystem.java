@@ -61,6 +61,7 @@ public class DriveSubsystem extends SubsystemBase {
     MG2_Encoder.setPositionConversionFactor(DriveTrain.motorRotationsToInches);
 
     for (CANSparkMax motor : motors) {
+      motor.restoreFactoryDefaults();
       motor.setOpenLoopRampRate(DriveTrain.timeToFullSpeed);
       motor.setIdleMode(IdleMode.kBrake);
     }
