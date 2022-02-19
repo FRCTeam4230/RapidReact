@@ -13,10 +13,11 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Intake;
+import frc.robot.Constants.MotorIDs;
 
 public class ArmSubsystem extends SubsystemBase {
 
-  private final CANSparkMax motor = new CANSparkMax(7, MotorType.kBrushless);
+  private final CANSparkMax motor = new CANSparkMax(MotorIDs.arm, MotorType.kBrushless);
   private final RelativeEncoder encoder = motor.getEncoder();
   private final DigitalInput lowerLimitSwitch = new DigitalInput(9);
 

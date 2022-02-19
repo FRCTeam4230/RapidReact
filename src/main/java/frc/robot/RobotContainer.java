@@ -8,6 +8,8 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants.DigitalIOIDs;
+import frc.robot.Constants.MotorIDs;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ManualClimbCommand;
@@ -32,8 +34,10 @@ public class RobotContainer {
 
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
-  private final ClimberSubsystem leftClimberSubsystem = new ClimberSubsystem(5, 5);
-  private final ClimberSubsystem rightClimberSubsystem = new ClimberSubsystem(6, 7);
+  private final ClimberSubsystem leftClimberSubsystem = new ClimberSubsystem(MotorIDs.leftClimber,
+      DigitalIOIDs.leftClimber);
+  private final ClimberSubsystem rightClimberSubsystem = new ClimberSubsystem(MotorIDs.rightClimber,
+      DigitalIOIDs.rightClimber);
   private final XboxController controller = new XboxController(0);
   private final XboxController secondController = new XboxController(1);
 
