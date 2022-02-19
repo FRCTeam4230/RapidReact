@@ -4,22 +4,22 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.DriveTrain;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.Constants.Climber;
+import frc.robot.subsystems.ClimberSubsystem;
 
-public class TeleopCommand extends CommandBase {
-  private DriveSubsystem driveSubsystem;
-  private final XboxController controller;
+public class ManualClimbCommand extends CommandBase {
+  private final ClimberSubsystem climber;
+  private final DoubleSupplier input;
 
-  /** Creates a new TeleopCommand. */
-  public TeleopCommand(DriveSubsystem driveSubsystem, XboxController controller) {
+  /** Creates a new ManualClimbCommand. */
+  public ManualClimbCommand(ClimberSubsystem climberSubsystem, DoubleSupplier input) {
+    climber = climberSubsystem;
+    this.input = input;
     // Use addRequirements() here to declare subsystem dependencies.
-    this.driveSubsystem = driveSubsystem;
-    this.controller = controller;
-
-    addRequirements(driveSubsystem);
+    addRequirements(climberSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -30,14 +30,13 @@ public class TeleopCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSubsystem.arcadeDrive(controller.getLeftY() * DriveTrain.moveMult,
-        controller.getRightX() * DriveTrain.turnMult);
+    climber.setSpeed(input.getAsDouble() * Climber.speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveSubsystem.stop();
+    climber.stop();
   }
 
   // Returns true when the command should end.
