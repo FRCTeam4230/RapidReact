@@ -66,7 +66,7 @@ public class DriveDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return mg1PidController.atSetpoint() && mg2PidController.atSetpoint();
+    return mg1PidController.atSetpoint() || mg2PidController.atSetpoint();
   }
 
   @Override
