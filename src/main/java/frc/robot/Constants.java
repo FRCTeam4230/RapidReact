@@ -38,4 +38,18 @@ public final class Constants {
 
     public static final double speed = 0.1;
   }
+
+  public static final class MotorIDs {
+    public static final int arm = 7;
+    public static final int intake = 8;
+    public static final int leftClimber = 5;
+    public static final int rightClimber = 6;
+    public static final int[] dirveGroup1 = { 1, 2 };
+    public static final int[] driveGroup2 = { 3, 4 };
+  }
+
+  public static class DigitalIOIDs {
+    public static final int leftClimber = 5;
+    public static final int rightClimber = 7;
+  }
 }
