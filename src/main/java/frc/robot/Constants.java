@@ -22,6 +22,8 @@ public final class Constants {
     public static final double kP = 0.04;
     public static final double kI = 0;
     public static final double kD = 0;
+
+    public static final double timeToFullSpeed = 0.5;
   }
 
   public final class Intake {

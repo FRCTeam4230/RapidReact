@@ -61,8 +61,8 @@ public class DriveSubsystem extends SubsystemBase {
     MG2_Encoder.setPositionConversionFactor(DriveTrain.motorRotationsToInches);
 
     for (CANSparkMax motor : motors) {
-      motor.setOpenLoopRampRate(3);
-      motor.setIdleMode(IdleMode.kCoast);
+      motor.setOpenLoopRampRate(DriveTrain.timeToFullSpeed);
+      motor.setIdleMode(IdleMode.kBrake);
     }
 
     differentialDrive = new DifferentialDrive(MG1, MG2);
