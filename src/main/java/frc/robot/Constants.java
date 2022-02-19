@@ -51,5 +51,6 @@ public final class Constants {
   public static class DigitalIOIDs {
     public static final int leftClimber = 5;
     public static final int rightClimber = 7;
+    public static final int lowerArmLimit = 9;
   }
 }
