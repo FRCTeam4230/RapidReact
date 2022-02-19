@@ -17,7 +17,7 @@ public final class Constants {
     public static final double motorRotationsToWheelRotations = 1 / 10.71;
     public static final double wheelRotationsToInches = Math.PI * 6;
     // public static final double motorRotationsToInches = motorRotationsToWheelRotations * wheelRotationsToInches;
-    public static final double motorRotationsToInches = 100 / 56.17;
+    public static final double motorRotationsToInches = 72 / 40.687;
 
     public static final double kP = 0.04;
     public static final double kI = 0;
