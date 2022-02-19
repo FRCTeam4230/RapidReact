@@ -50,18 +50,11 @@ public class DriveDistance extends CommandBase {
     mg1Output += Math.copySign(baseSpeed, mg1Output);
     mg2Output += Math.copySign(baseSpeed, mg2Output);
 
-    mg1Output = scaleSpeed(mg1Output);
-    mg2Output = scaleSpeed(mg2Output);
-
     driveSubsystem.setSpeeds(mg1Output, mg2Output);
     NetworkTableInstance.getDefault().getEntry("mg1Output").setDouble(mg1Output);
     NetworkTableInstance.getDefault().getEntry("mg2Output").setDouble(mg2Output);
 
     NetworkTableInstance.getDefault().getEntry("1at setpoint").setBoolean(mg1PidController.atSetpoint());
-  }
-
-  private static double scaleSpeed(double in) {
-    return Math.copySign(1 - 1 / (1 + Math.abs(in)), in) * 0.8;
   }
 
   // Called once the command ends or is interrupted.
