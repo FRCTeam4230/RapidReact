@@ -76,7 +76,7 @@ public class RobotContainer {
 
     makeButton(XboxController.Button.kA, new InstantCommand(driveSubsystem::resetEncoders, driveSubsystem));
 
-    makeButton(XboxController.Button.kX, new InstantCommand(armSubsystem::raise, armSubsystem));
+    makeButton(XboxController.Button.kB, new InstantCommand(armSubsystem::raise, armSubsystem));
     makeButton(XboxController.Button.kY, new InstantCommand(armSubsystem::lower, armSubsystem));
 
     CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, teleopCommand);
