@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -29,8 +32,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   private final DifferentialDrive differentialDrive;
 
-  private final RelativeEncoder MG1_Encoder;
-  private final RelativeEncoder MG2_Encoder;
+  private final RelativeEncoder MG1_Encoder1;
+  private final RelativeEncoder MG1_Encoder2;
+  private final RelativeEncoder MG2_Encoder1;
+  private final RelativeEncoder MG2_Encoder2;
 
   private final AHRS navx = new AHRS(SPI.Port.kMXP);
 
@@ -49,22 +54,25 @@ public class DriveSubsystem extends SubsystemBase {
     mg2Motors = new CANSparkMax[mg2IDs.length];
     for (int i = 0; i < mg2IDs.length; i++) {
       mg2Motors[i] = new CANSparkMax(mg2IDs[i], MotorType.kBrushless);
-      mg2Motors[i].setInverted(true);
-      motors[i + mg1IDs.length] = mg1Motors[i];
+      motors[i + mg1IDs.length] = mg2Motors[i];
     }
     MG2 = new MotorControllerGroup(mg2Motors);
-
-    MG1_Encoder = mg1Motors[0].getEncoder();
-    MG2_Encoder = mg2Motors[0].getEncoder();
-
-    MG1_Encoder.setPositionConversionFactor(DriveTrain.motorRotationsToInches);
-    MG2_Encoder.setPositionConversionFactor(DriveTrain.motorRotationsToInches);
 
     for (CANSparkMax motor : motors) {
       motor.restoreFactoryDefaults();
       motor.setOpenLoopRampRate(DriveTrain.timeToFullSpeed);
-      motor.setIdleMode(IdleMode.kBrake);
+      motor.setIdleMode(IdleMode.kCoast);
     }
+
+    MG1_Encoder1 = mg1Motors[0].getEncoder();
+    MG1_Encoder2 = mg1Motors[1].getEncoder();
+    MG2_Encoder1 = mg2Motors[0].getEncoder();
+    MG2_Encoder2 = mg2Motors[1].getEncoder();
+
+    Stream.of(MG1_Encoder1, MG1_Encoder2, MG2_Encoder1, MG2_Encoder2)
+        .forEach(encoder -> encoder.setPositionConversionFactor(DriveTrain.motorRotationsToInches));
+
+    Arrays.stream(mg2Motors).forEach(motor -> motor.setInverted(true));
 
     differentialDrive = new DifferentialDrive(MG1, MG2);
 
@@ -87,31 +95,31 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getAverageEncoderDistance() {
-    return (MG1_Encoder.getPosition() + MG2_Encoder.getPosition()) / 2.0;
+    return (getMg1Position() + getMg2Position()) / 2.0;
   }
 
   public void resetEncoders() {
-    MG1_Encoder.setPosition(0);
-    MG2_Encoder.setPosition(0);
+    Stream.of(MG1_Encoder1, MG1_Encoder2, MG2_Encoder1, MG2_Encoder2)
+        .forEach(encoder -> encoder.setPositionConversionFactor(0));
+  }
+
+  public double getMg1Position() {
+    return (MG1_Encoder1.getPosition() + MG1_Encoder2.getPosition()) / 2;
+  }
+
+  public double getMg2Position() {
+    return (MG2_Encoder1.getPosition() + MG2_Encoder2.getPosition()) / 2;
   }
 
   public void stop() {
     differentialDrive.tankDrive(0, 0);
   }
 
-  public double getMg1Position() {
-    return MG1_Encoder.getPosition();
-  }
-
-  public double getMg2Position() {
-    return MG2_Encoder.getPosition();
-  }
-
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
 
-    builder.addDoubleProperty("MG1_Encoder", MG1_Encoder::getPosition, MG1_Encoder::setPosition);
-    builder.addDoubleProperty("MG2_Encoder", MG2_Encoder::getPosition, MG2_Encoder::setPosition);
+    builder.addDoubleProperty("MG1_Encoder", this::getMg1Position, null);
+    builder.addDoubleProperty("MG2_Encoder", this::getMg2Position, null);
   }
 }
