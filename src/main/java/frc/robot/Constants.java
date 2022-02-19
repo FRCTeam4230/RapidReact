@@ -19,13 +19,20 @@ public final class Constants {
     // public static final double motorRotationsToInches = motorRotationsToWheelRotations * wheelRotationsToInches;
     public static final double motorRotationsToInches = 72 / 40.687;
 
-    public static final double kP = 0.04;
-    public static final double kI = 0;
-    public static final double kD = 0;
-
     public static final double timeToFullSpeed = 0.5;
     public static final double moveMult = 0.6;
     public static final double turnMult = 0.6;
+
+    public final class DriveDistance {
+      public static final double kP = 0.04;
+      public static final double kI = 0;
+      public static final double kD = 0;
+
+      public static final double baseSpeed = 0.02;
+
+      public static final double tolerance = 0.25;
+      public static final double velocityTolerance = 0.2;
+    }
   }
 
   public final class Intake {
