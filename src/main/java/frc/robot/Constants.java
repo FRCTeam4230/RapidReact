@@ -24,6 +24,8 @@ public final class Constants {
     public static final double kD = 0;
 
     public static final double timeToFullSpeed = 0.5;
+    public static final double moveMult = 0.6;
+    public static final double turnMult = 0.6;
   }
 
   public final class Intake {

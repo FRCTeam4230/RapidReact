@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DriveTrain;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class TeleopCommand extends CommandBase {
@@ -29,7 +30,8 @@ public class TeleopCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSubsystem.arcadeDrive(controller.getLeftY() * 0.4, controller.getRightX() * 0.4);
+    driveSubsystem.arcadeDrive(controller.getLeftY() * DriveTrain.moveMult,
+        controller.getRightX() * DriveTrain.turnMult);
   }
 
   // Called once the command ends or is interrupted.
