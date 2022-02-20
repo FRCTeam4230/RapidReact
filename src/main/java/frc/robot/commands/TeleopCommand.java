@@ -61,7 +61,5 @@ public class TeleopCommand extends CommandBase {
 
     builder.addDoubleProperty("move speed", () -> moveMult, s -> moveMult = s);
     builder.addDoubleProperty("turn speed", () -> turnMult, s -> turnMult = s);
-
-    builder.addDoubleProperty("ramp time", () -> 0, driveSubsystem::setRampTime);
   }
 }

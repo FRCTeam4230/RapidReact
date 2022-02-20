@@ -129,6 +129,6 @@ public class DriveSubsystem extends SubsystemBase {
     builder.addDoubleProperty("MG1_Encoder", this::getMg1Position, null);
     builder.addDoubleProperty("MG2_Encoder", this::getMg2Position, null);
 
-    builder.addDoubleProperty("ramp rate", () -> motors.get(MotorID.MG1_1).getOpenLoopRampRate(), this::setRampTime);
+    builder.addDoubleProperty("ramp rate", () -> motors.get(MotorID.MG1_1).getOpenLoopRampRate(), null);
   }
 }
