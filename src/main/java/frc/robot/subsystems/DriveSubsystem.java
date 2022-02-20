@@ -25,22 +25,18 @@ import frc.robot.Constants.DriveTrain;
 import frc.robot.Constants.MotorID;
 
 public class DriveSubsystem extends SubsystemBase {
-  
+
   private final MotorControllerGroup MG1;
   private final MotorControllerGroup MG2;
 
-  
   private Map<MotorID, CANSparkMax> motors = new HashMap<>();
   private Map<MotorID, RelativeEncoder> motorEncoders = new HashMap<>();
 
   private final DifferentialDrive differentialDrive;
 
-
   private final AHRS navx = new AHRS(SPI.Port.kMXP);
 
-
-  private static Function<MotorID,CANSparkMax> createMotor = (id) ->
-  {
+  private static Function<MotorID, CANSparkMax> createMotor = (id) -> {
     CANSparkMax motor = new CANSparkMax(id.getId(), MotorType.kBrushless);
     motor.restoreFactoryDefaults();
     motor.setOpenLoopRampRate(DriveTrain.timeToFullSpeed);
@@ -53,31 +49,30 @@ public class DriveSubsystem extends SubsystemBase {
   };
 
   public DriveSubsystem(List<MotorID> motorIds) {
-   
+
     super();
 
-
     motorIds.forEach(motorId -> {
-        
+
       CANSparkMax controller = createMotor.apply(motorId);
       motors.put(motorId, controller);
       motorEncoders.put(motorId, controller.getEncoder());
 
-      switch(motorId){
+      switch (motorId) {
         case MG1_1:
         case MG1_2:
 
-        break;
+          break;
         case MG2_1:
         case MG2_2:
           controller.setInverted(true);
-        break;
+          break;
         //drive subsystem doesn't support any other motors
         default:
-        break;
+          break;
       }
     });
-    
+
     MG1 = new MotorControllerGroup(motors.get(MotorID.MG1_1), motors.get(MotorID.MG1_2));
     MG2 = new MotorControllerGroup(motors.get(MotorID.MG2_1), motors.get(MotorID.MG2_2));
 
@@ -109,12 +104,12 @@ public class DriveSubsystem extends SubsystemBase {
     motors.entrySet().forEach(encoder -> encoder.getValue().getEncoder().setPosition(0));
   }
 
-  public double getMg1Position(){
-    return (motorEncoders.get(MotorID.MG1_1).getPosition() + motorEncoders.get(MotorID.MG1_2).getPosition())/2.0;
+  public double getMg1Position() {
+    return (motorEncoders.get(MotorID.MG1_1).getPosition() + motorEncoders.get(MotorID.MG1_2).getPosition()) / 2.0;
   }
 
   public double getMg2Position() {
-    return (motorEncoders.get(MotorID.MG2_1).getPosition() + motorEncoders.get(MotorID.MG2_2).getPosition())/2.0;
+    return (motorEncoders.get(MotorID.MG2_1).getPosition() + motorEncoders.get(MotorID.MG2_2).getPosition()) / 2.0;
   }
 
   public void setRampTime(double time) {

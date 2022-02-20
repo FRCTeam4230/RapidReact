@@ -10,18 +10,19 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveDistanceParams;
-import frc.robot.Constants.DriveTrain;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveDistance extends CommandBase {
   private final DriveSubsystem driveSubsystem;
 
-  private final PIDController mg1PidController = new PIDController(DriveDistanceParams.kP, DriveDistanceParams.kI, DriveDistanceParams.kD);
-  private final PIDController mg2PidController = new PIDController(DriveDistanceParams.kP, DriveDistanceParams.kI, DriveDistanceParams.kD);
+  private final PIDController mg1PidController = new PIDController(DriveDistanceParams.kP, DriveDistanceParams.kI,
+      DriveDistanceParams.kD);
+  private final PIDController mg2PidController = new PIDController(DriveDistanceParams.kP, DriveDistanceParams.kI,
+      DriveDistanceParams.kD);
 
   private double setpoint = 5;
 
-  private double baseSpeed = 0.03;
+  private double baseSpeed = DriveDistanceParams.baseSpeed;
 
   /** Creates a new DriveDistance. */
   public DriveDistance(DriveSubsystem driveSubsystem) {
@@ -48,16 +49,14 @@ public class DriveDistance extends CommandBase {
     double mg1Output = mg1PidController.calculate(driveSubsystem.getMg1Position());
     double mg2Output = mg2PidController.calculate(driveSubsystem.getMg2Position());
 
+    mg1Output += Math.copySign(baseSpeed, mg1Output);
+    mg2Output += Math.copySign(baseSpeed, mg2Output);
 
     driveSubsystem.setSpeeds(mg1Output, mg2Output);
     NetworkTableInstance.getDefault().getEntry("mg1Output").setDouble(mg1Output);
     NetworkTableInstance.getDefault().getEntry("mg2Output").setDouble(mg2Output);
 
     NetworkTableInstance.getDefault().getEntry("1at setpoint").setBoolean(mg1PidController.atSetpoint());
-  }
-
-  private static double scaleSpeed(double in) {
-    return Math.copySign(1 - 1 / (1 + Math.abs(in)), in) * 0.8;
   }
 
   // Called once the command ends or is interrupted.
