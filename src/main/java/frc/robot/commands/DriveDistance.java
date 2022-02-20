@@ -20,7 +20,7 @@ public class DriveDistance extends CommandBase {
   private final PIDController mg2PidController = new PIDController(DriveDistanceParams.kP, DriveDistanceParams.kI,
       DriveDistanceParams.kD);
 
-  private Double distance = 5.0;
+  private Double distance;
 
   public Double getDistance() {
     return distance;
@@ -33,8 +33,12 @@ public class DriveDistance extends CommandBase {
 
   private Double baseSpeed = DriveDistanceParams.baseSpeed;
 
-  /** Creates a new DriveDistance. */
   private DriveDistance(DriveSubsystem driveSubsystem) {
+    this(driveSubsystem, 0.5);
+  }
+
+  /** Creates a new DriveDistance. */
+  private DriveDistance(DriveSubsystem driveSubsystem, double distance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveSubsystem = driveSubsystem;
     addRequirements(driveSubsystem);
@@ -42,7 +46,9 @@ public class DriveDistance extends CommandBase {
     mg1PidController.setTolerance(DriveDistanceParams.tolerance, DriveDistanceParams.tolerance);
     mg2PidController.setTolerance(DriveDistanceParams.tolerance, DriveDistanceParams.tolerance);
 
-    SmartDashboard.putData(this);
+    this.distance = distance;
+
+    SmartDashboard.putData("drive dist " + distance, this);
   }
 
   public static final DriveDistance create(DriveSubsystem driveSubsystem) {
@@ -50,7 +56,7 @@ public class DriveDistance extends CommandBase {
   }
 
   public static final DriveDistance create(DriveSubsystem driveSubsystem, Double distance) {
-    return new DriveDistance(driveSubsystem).setDistance(distance);
+    return new DriveDistance(driveSubsystem, distance);
   }
 
   // Called when the command is initially scheduled.
@@ -85,7 +91,7 @@ public class DriveDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return mg1PidController.atSetpoint() && mg2PidController.atSetpoint();
+    return mg1PidController.atSetpoint() || mg2PidController.atSetpoint();
   }
 
   @Override
@@ -108,6 +114,6 @@ public class DriveDistance extends CommandBase {
     });
 
     builder.addDoubleProperty("base speed", () -> baseSpeed, s -> baseSpeed = s);
-    builder.addDoubleProperty("setpoint", () -> distance, s -> distance = s);
+    builder.addDoubleProperty("distance", () -> distance, s -> distance = s);
   }
 }
