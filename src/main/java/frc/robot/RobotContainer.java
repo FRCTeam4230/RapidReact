@@ -16,10 +16,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DigitalIOIDs;
 import frc.robot.Constants.MotorID;
 import frc.robot.commands.DriveDistance;
-import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ManualClimbCommand;
 import frc.robot.commands.TeleopCommand;
 import frc.robot.commands.autonomous.TaxiCommand;
+import frc.robot.commands.intake.ExtakeCommand;
+import frc.robot.commands.intake.IntakeCommand;
+import frc.robot.commands.intake.ManualIntakeCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -47,7 +49,7 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final DoubleSupplier intakeSupplier = () -> controller.getLeftTriggerAxis()
       - controller.getRightTriggerAxis();
-  private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem, intakeSupplier);
+  private final ManualIntakeCommand intakeCommand = new ManualIntakeCommand(intakeSubsystem, intakeSupplier);
 
   private final TeleopCommand teleopCommand = new TeleopCommand(driveSubsystem, controller);
 
@@ -81,6 +83,11 @@ public class RobotContainer {
 
     makeButton(XboxController.Button.kB, new InstantCommand(armSubsystem::raise, armSubsystem));
     makeButton(XboxController.Button.kY, new InstantCommand(armSubsystem::lower, armSubsystem));
+
+    new JoystickButton(controller, XboxController.Button.kRightBumper.value)
+        .whenHeld(new ExtakeCommand(intakeSubsystem));
+    new JoystickButton(controller, XboxController.Button.kLeftBumper.value)
+        .whenHeld(new IntakeCommand(intakeSubsystem));
 
     CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, teleopCommand);
 
