@@ -19,7 +19,7 @@ import frc.robot.Constants.MotorID;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.ManualClimbCommand;
 import frc.robot.commands.TeleopCommand;
-import frc.robot.commands.autonomous.TaxiCommand;
+import frc.robot.commands.TurnCommand;
 import frc.robot.commands.intake.ExtakeCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.ManualIntakeCommand;
@@ -117,6 +117,7 @@ public class RobotContainer {
   }
 
   private Command createAutoComamand() {
-    return TaxiCommand.create(driveSubsystem);
+    return new TurnCommand(driveSubsystem, 10);
+    // return new AutoCommand(driveSubsystem, intakeSubsystem);
   }
 }

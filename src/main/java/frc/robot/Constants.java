@@ -26,6 +26,17 @@ public final class Constants {
     public static final double velocityTolerance = 0.2;
   }
 
+  public static final class TurnCommandParams {
+    public static final double kP = 0.04;
+    public static final double kI = 0;
+    public static final double kD = 0;
+
+    public static final double baseSpeed = 0.02;
+
+    public static final double tolerance = 0.25;
+    public static final double velocityTolerance = 0.2;
+  }
+
   public final class DriveTrain {
     public static final double motorRotationsToWheelRotations = 1 / 10.71;
     public static final double wheelRotationsToInches = Math.PI * 6;

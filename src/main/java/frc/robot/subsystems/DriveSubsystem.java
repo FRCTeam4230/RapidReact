@@ -81,11 +81,17 @@ public class DriveSubsystem extends SubsystemBase {
     setRampTime(DriveTrain.timeToFullSpeed);
 
     SmartDashboard.putData(this);
+
+    navx.calibrate();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void arcadeDrive(double speed, double rotations, boolean squareInputs) {
+    differentialDrive.arcadeDrive(speed, rotations, true);
   }
 
   public void arcadeDrive(double speed, double rotations) {
@@ -122,6 +128,10 @@ public class DriveSubsystem extends SubsystemBase {
     differentialDrive.tankDrive(0, 0);
   }
 
+  public double getRotation() {
+    return navx.getAngle();
+  }
+
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
@@ -130,5 +140,7 @@ public class DriveSubsystem extends SubsystemBase {
     builder.addDoubleProperty("MG2_Encoder", this::getMg2Position, null);
 
     builder.addDoubleProperty("ramp rate", () -> motors.get(MotorID.MG1_1).getOpenLoopRampRate(), null);
+
+    builder.addDoubleProperty("angle", this::getRotation, null);
   }
 }
