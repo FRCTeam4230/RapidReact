@@ -5,6 +5,11 @@
 package frc.robot.subsystems;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -13,66 +18,71 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveTrain;
 
 public class DriveSubsystem extends SubsystemBase {
-  private final CANSparkMax[] mg1Motors;
+  
   private final MotorControllerGroup MG1;
-
-  private final CANSparkMax[] mg2Motors;
   private final MotorControllerGroup MG2;
 
-  private final CANSparkMax[] motors;
+  private final List<CANSparkMax> motors;
+  private final Set<RelativeEncoder> mg1Encoders = new HashSet<>();
+  private final Set<RelativeEncoder> mg2Encoders = new HashSet<>();
 
   private final DifferentialDrive differentialDrive;
 
-  private final RelativeEncoder MG1_Encoder1;
-  private final RelativeEncoder MG1_Encoder2;
-  private final RelativeEncoder MG2_Encoder1;
-  private final RelativeEncoder MG2_Encoder2;
 
   private final AHRS navx = new AHRS(SPI.Port.kMXP);
 
-  public DriveSubsystem(int[] mg1IDs, int[] mg2IDs) {
+
+  private static Function<Integer,CANSparkMax> createMotor = (id) ->
+  {
+    CANSparkMax motor = new CANSparkMax(id, MotorType.kBrushless);
+    motor.restoreFactoryDefaults();
+    motor.setOpenLoopRampRate(DriveTrain.timeToFullSpeed);
+    motor.setIdleMode(IdleMode.kCoast);
+
+    RelativeEncoder maxEncoder = motor.getEncoder();
+    maxEncoder.setPositionConversionFactor(DriveTrain.motorRotationsToInches);
+
+    return motor;
+  };
+
+  public DriveSubsystem(List<Integer> mg1IDs, List<Integer> mg2IDs) {
+   
     super();
+  
+    //little code du[plication but this will build all the motors and add their configuration
+    motors = mg1IDs.stream()
+    .map(id -> {
+      CANSparkMax max = createMotor.apply(id);
+      mg1Encoders.add(max.getEncoder());
+      return max;
+    })
+    .collect(Collectors.toList());
+    MG1 = new MotorControllerGroup((MotorController[])motors.toArray());
 
-    motors = new CANSparkMax[mg1IDs.length + mg2IDs.length];
 
-    mg1Motors = new CANSparkMax[mg1IDs.length];
-    for (int i = 0; i < mg1IDs.length; i++) {
-      mg1Motors[i] = new CANSparkMax(mg1IDs[i], MotorType.kBrushless);
-      motors[i] = mg1Motors[i];
-    }
-    MG1 = new MotorControllerGroup(mg1Motors);
+    List<CANSparkMax> mg2Motors =
+      mg2IDs.stream()
+      .map(id -> {
+        CANSparkMax max = createMotor.apply(id);
+        mg2Encoders.add(max.getEncoder());
+        max.setInverted(true);
+        return max;
+    })
+    .collect(Collectors.toList());
 
-    mg2Motors = new CANSparkMax[mg2IDs.length];
-    for (int i = 0; i < mg2IDs.length; i++) {
-      mg2Motors[i] = new CANSparkMax(mg2IDs[i], MotorType.kBrushless);
-      motors[i + mg1IDs.length] = mg2Motors[i];
-    }
-    MG2 = new MotorControllerGroup(mg2Motors);
-
-    for (CANSparkMax motor : motors) {
-      motor.restoreFactoryDefaults();
-      motor.setOpenLoopRampRate(DriveTrain.timeToFullSpeed);
-      motor.setIdleMode(IdleMode.kCoast);
-    }
-
-    MG1_Encoder1 = mg1Motors[0].getEncoder();
-    MG1_Encoder2 = mg1Motors[1].getEncoder();
-    MG2_Encoder1 = mg2Motors[0].getEncoder();
-    MG2_Encoder2 = mg2Motors[1].getEncoder();
-
-    Stream.of(MG1_Encoder1, MG1_Encoder2, MG2_Encoder1, MG2_Encoder2)
-        .forEach(encoder -> encoder.setPositionConversionFactor(DriveTrain.motorRotationsToInches));
-
-    Arrays.stream(mg2Motors).forEach(motor -> motor.setInverted(true));
+    motors.addAll(mg2Motors);
+    MG2 = new MotorControllerGroup((MotorController[])mg2Motors.toArray());
 
     differentialDrive = new DifferentialDrive(MG1, MG2);
 
@@ -99,16 +109,16 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void resetEncoders() {
-    Stream.of(MG1_Encoder1, MG1_Encoder2, MG2_Encoder1, MG2_Encoder2)
-        .forEach(encoder -> encoder.setPosition(0));
+    Stream.of(mg1Encoders, mg2Encoders)
+        .forEach(encoders -> encoders.stream().map(encoder -> encoder.setPosition(0)));
   }
 
-  public double getMg1Position() {
-    return (MG1_Encoder1.getPosition() + MG1_Encoder2.getPosition()) / 2;
+  public double getMg1Position(){
+    return mg1Encoders.stream().map(RelativeEncoder::getPosition).reduce(0.0, Double::sum, Double::sum)/2.0;
   }
 
   public double getMg2Position() {
-    return (MG2_Encoder1.getPosition() + MG2_Encoder2.getPosition()) / 2;
+    return mg2Encoders.stream().map(RelativeEncoder::getPosition).reduce(0.0, Double::sum, Double::sum)/2.0;
   }
 
   public void setRampTime(double time) {

@@ -4,10 +4,6 @@
 
 package frc.robot.commands;
 
-import static frc.robot.Constants.DriveTrain.DriveDistance.*;
-
-import java.util.stream.Stream;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -19,12 +15,12 @@ import frc.robot.subsystems.DriveSubsystem;
 public class DriveDistance extends CommandBase {
   private final DriveSubsystem driveSubsystem;
 
-  private final PIDController mg1PidController = new PIDController(kP, kI, kD);
-  private final PIDController mg2PidController = new PIDController(kP, kI, kD);
+  private final PIDController mg1PidController = new PIDController(DriveTrain.kP, DriveTrain.kI, DriveTrain.kD);
+  private final PIDController mg2PidController = new PIDController(DriveTrain.kP, DriveTrain.kI, DriveTrain.kD);
 
   private double setpoint = 5;
 
-  private double baseSpeed = DriveTrain.DriveDistance.baseSpeed;
+  private double baseSpeed = 0.03;
 
   /** Creates a new DriveDistance. */
   public DriveDistance(DriveSubsystem driveSubsystem) {
@@ -32,8 +28,8 @@ public class DriveDistance extends CommandBase {
     this.driveSubsystem = driveSubsystem;
     addRequirements(driveSubsystem);
 
-    Stream.of(mg1PidController, mg2PidController)
-        .forEach(controller -> controller.setTolerance(tolerance, velocityTolerance));
+    mg1PidController.setTolerance(0.05, 0.2);
+    mg2PidController.setTolerance(0.05, 0.2);
 
     SmartDashboard.putData(this);
   }
@@ -51,14 +47,16 @@ public class DriveDistance extends CommandBase {
     double mg1Output = mg1PidController.calculate(driveSubsystem.getMg1Position());
     double mg2Output = mg2PidController.calculate(driveSubsystem.getMg2Position());
 
-    mg1Output += Math.copySign(baseSpeed, mg1Output);
-    mg2Output += Math.copySign(baseSpeed, mg2Output);
 
     driveSubsystem.setSpeeds(mg1Output, mg2Output);
     NetworkTableInstance.getDefault().getEntry("mg1Output").setDouble(mg1Output);
     NetworkTableInstance.getDefault().getEntry("mg2Output").setDouble(mg2Output);
 
     NetworkTableInstance.getDefault().getEntry("1at setpoint").setBoolean(mg1PidController.atSetpoint());
+  }
+
+  private static double scaleSpeed(double in) {
+    return Math.copySign(1 - 1 / (1 + Math.abs(in)), in) * 0.8;
   }
 
   // Called once the command ends or is interrupted.
@@ -70,7 +68,7 @@ public class DriveDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return mg1PidController.atSetpoint() || mg2PidController.atSetpoint();
+    return mg1PidController.atSetpoint() && mg2PidController.atSetpoint();
   }
 
   @Override

@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -55,8 +58,8 @@ public final class Constants {
     public static final int intake = 8;
     public static final int leftClimber = 5;
     public static final int rightClimber = 6;
-    public static final int[] dirveGroup1 = { 1, 2 };
-    public static final int[] driveGroup2 = { 3, 4 };
+    public static final List<Integer> dirveGroup1 = Arrays.asList(1,2);
+    public static final List<Integer> driveGroup2 = Arrays.asList(3, 4 );
   }
 
   public static class DigitalIOIDs {
