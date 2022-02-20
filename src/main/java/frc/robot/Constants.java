@@ -51,6 +51,10 @@ public final class Constants {
     public static final double speed = 0.1;
   }
 
+  public class Autonomous {
+    public static final double defaultTaxiDistance = 8;
+  }
+
   /*
   public static final class MotorIDs {
     public static final int arm = 7;

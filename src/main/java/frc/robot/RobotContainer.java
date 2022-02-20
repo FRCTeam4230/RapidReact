@@ -19,6 +19,7 @@ import frc.robot.commands.DriveDistance;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ManualClimbCommand;
 import frc.robot.commands.TeleopCommand;
+import frc.robot.commands.autonomous.TaxiCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -108,6 +109,6 @@ public class RobotContainer {
   }
 
   private Command createAutoComamand() {
-    return DriveDistance.create(driveSubsystem, 20.).andThen(DriveDistance.create(driveSubsystem, -10.));
+    return TaxiCommand.create(driveSubsystem);
   }
 }
