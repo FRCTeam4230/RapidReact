@@ -20,12 +20,21 @@ public class DriveDistance extends CommandBase {
   private final PIDController mg2PidController = new PIDController(DriveDistanceParams.kP, DriveDistanceParams.kI,
       DriveDistanceParams.kD);
 
-  private double setpoint = 5;
+  private Double distance = 5.0;
 
-  private double baseSpeed = DriveDistanceParams.baseSpeed;
+  public Double getDistance() {
+    return distance;
+  }
+
+  private DriveDistance setDistance(Double distance) {
+    this.distance = distance;
+    return this;
+  }
+
+  private Double baseSpeed = DriveDistanceParams.baseSpeed;
 
   /** Creates a new DriveDistance. */
-  public DriveDistance(DriveSubsystem driveSubsystem) {
+  private DriveDistance(DriveSubsystem driveSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveSubsystem = driveSubsystem;
     addRequirements(driveSubsystem);
@@ -36,11 +45,19 @@ public class DriveDistance extends CommandBase {
     SmartDashboard.putData(this);
   }
 
+  public static final DriveDistance create(DriveSubsystem driveSubsystem) {
+    return new DriveDistance(driveSubsystem);
+  }
+
+  public static final DriveDistance create(DriveSubsystem driveSubsystem, Double distance) {
+    return new DriveDistance(driveSubsystem).setDistance(distance);
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    mg1PidController.setSetpoint(driveSubsystem.getMg1Position() + setpoint);
-    mg2PidController.setSetpoint(driveSubsystem.getMg2Position() + setpoint);
+    mg1PidController.setSetpoint(driveSubsystem.getMg1Position() + distance);
+    mg2PidController.setSetpoint(driveSubsystem.getMg2Position() + distance);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -91,6 +108,6 @@ public class DriveDistance extends CommandBase {
     });
 
     builder.addDoubleProperty("base speed", () -> baseSpeed, s -> baseSpeed = s);
-    builder.addDoubleProperty("setpoint", () -> setpoint, s -> setpoint = s);
+    builder.addDoubleProperty("setpoint", () -> distance, s -> distance = s);
   }
 }

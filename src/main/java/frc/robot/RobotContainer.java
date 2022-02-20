@@ -74,7 +74,7 @@ public class RobotContainer {
   private final JoystickButton joystickButton = new JoystickButton(controller, XboxController.Button.kX.value);
 
   private void configureButtonBindings() {
-    joystickButton.whenPressed(new DriveDistance(driveSubsystem));
+    joystickButton.whenPressed(DriveDistance.create(driveSubsystem));
 
     makeButton(XboxController.Button.kA, new InstantCommand(driveSubsystem::resetEncoders, driveSubsystem));
 
