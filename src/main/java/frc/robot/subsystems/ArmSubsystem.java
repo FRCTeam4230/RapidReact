@@ -5,8 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -34,6 +35,10 @@ public class ArmSubsystem extends SubsystemBase {
   /** Creates a new InakteSubsystem. */
   public ArmSubsystem() {
     super();
+
+    motor.restoreFactoryDefaults();
+    motor.setIdleMode(IdleMode.kBrake);
+    motor.setOpenLoopRampRate(Constants.motorRampTime);
 
     SmartDashboard.putData(this);
   }

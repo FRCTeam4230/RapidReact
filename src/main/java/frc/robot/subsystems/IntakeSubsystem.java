@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.MotorID;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -18,6 +19,9 @@ public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
     super();
+
+    motor.configFactoryDefault();
+    motor.configOpenloopRamp(Constants.motorRampTime);
 
     SmartDashboard.putData(this);
   }
