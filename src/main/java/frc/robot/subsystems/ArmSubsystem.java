@@ -13,6 +13,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DigitalIOIDs;
 import frc.robot.Constants.Intake;
 import frc.robot.Constants.MotorID;
@@ -22,6 +23,7 @@ public class ArmSubsystem extends SubsystemBase {
   private final CANSparkMax motor = new CANSparkMax(MotorID.ARM.getId(), MotorType.kBrushless);
   private final RelativeEncoder encoder = motor.getEncoder();
   private final DigitalInput lowerLimitSwitch = new DigitalInput(DigitalIOIDs.lowerArmLimit);
+  private final DigitalInput upperLimitSwitch = new DigitalInput(DigitalIOIDs.upperArmLimit);
 
   public enum State {
     MOVING_UP,
@@ -30,7 +32,7 @@ public class ArmSubsystem extends SubsystemBase {
     DOWN;
   }
 
-  private State state = State.DOWN;
+  private State state = !lowerLimitSwitch.get() ? State.DOWN : State.UP;
 
   /** Creates a new InakteSubsystem. */
   public ArmSubsystem() {
@@ -46,7 +48,7 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (state == State.MOVING_UP && encoder.getPosition() > Intake.Limits.up) {
+    if (state == State.MOVING_UP && !upperLimitSwitch.get()) {
       state = State.UP;
       motor.stopMotor();
     } else if (state == State.MOVING_DOWN && !lowerLimitSwitch.get()) {
@@ -59,14 +61,14 @@ public class ArmSubsystem extends SubsystemBase {
     if (state == State.DOWN)
       return;
     state = State.MOVING_DOWN;
-    motor.set(-Intake.armSpeed);
+    motor.set(Intake.downArmSpeed);
   }
 
   public void raise() {
     if (state == State.UP)
       return;
     state = State.MOVING_UP;
-    motor.set(Intake.armSpeed);
+    motor.set(Intake.upArmSpeed);
   }
 
   public double getPosition() {
@@ -84,5 +86,6 @@ public class ArmSubsystem extends SubsystemBase {
     builder.addDoubleProperty("encoder postion", this::getPosition, encoder::setPosition);
     builder.addStringProperty("state", () -> getState().toString(), null);
     builder.addBooleanProperty("lower limit", lowerLimitSwitch::get, null);
+    builder.addBooleanProperty("upper limit", upperLimitSwitch::get, null);
   }
 }

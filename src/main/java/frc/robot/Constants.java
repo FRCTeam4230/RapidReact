@@ -85,5 +85,6 @@ public final class Constants {
     public static final int leftClimber = 5;
     public static final int rightClimber = 3;
     public static final int lowerArmLimit = 9;
+    public static final int upperArmLimit = 7;
   }
 }
