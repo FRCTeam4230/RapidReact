@@ -55,8 +55,8 @@ public class DriveDistance extends CommandBase {
     return new DriveDistance(driveSubsystem);
   }
 
-  public static final DriveDistance create(DriveSubsystem driveSubsystem, Double distance) {
-    return new DriveDistance(driveSubsystem, distance);
+  public static final DriveDistance create(DriveSubsystem driveSubsystem, Double distanceAsInches) {
+    return new DriveDistance(driveSubsystem, distanceAsInches);
   }
 
   // Called when the command is initially scheduled.

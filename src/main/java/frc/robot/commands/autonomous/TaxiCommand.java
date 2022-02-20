@@ -16,7 +16,7 @@ public class TaxiCommand {
   }
 
   public static Command create(DriveSubsystem driveSubsystem) {
-    DriveDistance out = DriveDistance.create(driveSubsystem, Autonomous.defaultTaxiDistance * 12);
+    DriveDistance out = DriveDistance.create(driveSubsystem, Autonomous.defaultTaxiDistance);
 
     SmartDashboard.putData("Taxi command", out);
     return out;

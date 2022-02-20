@@ -52,7 +52,7 @@ public final class Constants {
   }
 
   public class Autonomous {
-    public static final double defaultTaxiDistance = 8;
+    public static final double defaultTaxiDistance = 8 * 12;
   }
 
   /*
