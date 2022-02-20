@@ -63,7 +63,7 @@ public final class Constants {
   */
 
   public enum MotorID {
-    ARM(7), INTAKE(8), LEFT_CLIMBER(5), RIGHT_CLIMBER(6), MG1_1(1), MG1_2(2), MG2_1(3), MG2_2(4);
+    ARM(7), INTAKE(8), LEFT_CLIMBER(6), RIGHT_CLIMBER(5), MG1_1(1), MG1_2(2), MG2_1(3), MG2_2(4);
 
     private Integer id;
 
@@ -78,7 +78,7 @@ public final class Constants {
 
   public static class DigitalIOIDs {
     public static final int leftClimber = 5;
-    public static final int rightClimber = 7;
+    public static final int rightClimber = 3;
     public static final int lowerArmLimit = 9;
   }
 }
