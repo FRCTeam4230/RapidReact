@@ -4,12 +4,13 @@
 
 package frc.robot;
 
+import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.DigitalIOIDs;
-import frc.robot.Constants.MotorIDs;
+import frc.robot.Constants.MotorID;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ManualClimbCommand;
@@ -23,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -32,11 +34,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private final DriveSubsystem driveSubsystem = new DriveSubsystem(MotorIDs.dirveGroup1, MotorIDs.driveGroup2);
+  private final DriveSubsystem driveSubsystem = new DriveSubsystem(Arrays.asList(MotorID.MG1_1, MotorID.MG1_2, MotorID.MG2_1, MotorID.MG2_2));
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
-  private final ClimberSubsystem leftClimberSubsystem = new ClimberSubsystem(MotorIDs.leftClimber,
+  private final ClimberSubsystem leftClimberSubsystem = new ClimberSubsystem(MotorID.LEFT_CLIMBER.getId(),
       DigitalIOIDs.leftClimber);
-  private final ClimberSubsystem rightClimberSubsystem = new ClimberSubsystem(MotorIDs.rightClimber,
+  private final ClimberSubsystem rightClimberSubsystem = new ClimberSubsystem(MotorID.RIGHT_CLIMBER.getId(),
       DigitalIOIDs.rightClimber);
   private final XboxController controller = new XboxController(0);
   private final XboxController secondController = new XboxController(1);

@@ -9,14 +9,15 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DriveDistanceParams;
 import frc.robot.Constants.DriveTrain;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveDistance extends CommandBase {
   private final DriveSubsystem driveSubsystem;
 
-  private final PIDController mg1PidController = new PIDController(DriveTrain.kP, DriveTrain.kI, DriveTrain.kD);
-  private final PIDController mg2PidController = new PIDController(DriveTrain.kP, DriveTrain.kI, DriveTrain.kD);
+  private final PIDController mg1PidController = new PIDController(DriveDistanceParams.kP, DriveDistanceParams.kI, DriveDistanceParams.kD);
+  private final PIDController mg2PidController = new PIDController(DriveDistanceParams.kP, DriveDistanceParams.kI, DriveDistanceParams.kD);
 
   private double setpoint = 5;
 
