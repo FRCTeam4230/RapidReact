@@ -99,8 +99,15 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
 
+  private final Command autoCommand = createAutoComamand();
+
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+
+    return autoCommand;
+  }
+
+  private Command createAutoComamand() {
+    return DriveDistance.create(driveSubsystem, 20.).andThen(DriveDistance.create(driveSubsystem, -10.));
   }
 }
