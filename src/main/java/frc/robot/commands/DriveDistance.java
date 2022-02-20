@@ -30,8 +30,8 @@ public class DriveDistance extends CommandBase {
     this.driveSubsystem = driveSubsystem;
     addRequirements(driveSubsystem);
 
-    mg1PidController.setTolerance(0.05, 0.2);
-    mg2PidController.setTolerance(0.05, 0.2);
+    mg1PidController.setTolerance(DriveDistanceParams.tolerance, DriveDistanceParams.tolerance);
+    mg2PidController.setTolerance(DriveDistanceParams.tolerance, DriveDistanceParams.tolerance);
 
     SmartDashboard.putData(this);
   }
