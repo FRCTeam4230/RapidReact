@@ -42,14 +42,15 @@ public final class Constants {
       public static final double up = 1;
     }
 
-    public static final double armSpeed = 0.1;
-    public static final double speed = 0.1;
+    public static final double downArmSpeed = -0.2;
+    public static final double upArmSpeed = 0.3;
+    public static final double speed = 1;
   }
 
   public final class Climber {
     public static final double highLimit = 10;
 
-    public static final double speed = 0.1;
+    public static final double speed = 0.8;
   }
 
   public class Autonomous {
