@@ -5,14 +5,13 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.Intake;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /** Add your docs here. */
 public abstract class AbstractIntakeCommand extends CommandBase {
-  private static final double SPEED = 1;
-
   protected enum Direction {
-    IN(SPEED), OUT(-SPEED);
+    IN(Intake.speed), OUT(-Intake.speed);
 
     private double value;
 
