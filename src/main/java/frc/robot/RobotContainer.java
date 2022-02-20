@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DigitalIOIDs;
 import frc.robot.Constants.MotorID;
@@ -79,14 +80,14 @@ public class RobotContainer {
   private void configureButtonBindings() {
     joystickButton.whenPressed(DriveDistance.create(driveSubsystem));
 
-    makeButton(XboxController.Button.kA, new InstantCommand(driveSubsystem::resetEncoders, driveSubsystem));
+    getButton(XboxController.Button.kA).whenPressed(new InstantCommand(driveSubsystem::resetEncoders, driveSubsystem));
 
-    makeButton(XboxController.Button.kB, new InstantCommand(armSubsystem::raise, armSubsystem));
-    makeButton(XboxController.Button.kY, new InstantCommand(armSubsystem::lower, armSubsystem));
+    getButton(XboxController.Button.kB).whenHeld(new InstantCommand(armSubsystem::raise, armSubsystem));
+    getButton(XboxController.Button.kY).whenHeld(new InstantCommand(armSubsystem::lower, armSubsystem));
 
-    new JoystickButton(controller, XboxController.Button.kRightBumper.value)
+    getButton(XboxController.Button.kRightBumper)
         .whenHeld(new ExtakeCommand(intakeSubsystem));
-    new JoystickButton(controller, XboxController.Button.kLeftBumper.value)
+    getButton(XboxController.Button.kLeftBumper)
         .whenHeld(new IntakeCommand(intakeSubsystem));
 
     CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, teleopCommand);
@@ -97,8 +98,8 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(intakeSubsystem, intakeCommand);
   }
 
-  private void makeButton(XboxController.Button button, Command command) {
-    new JoystickButton(controller, button.value).whenPressed(command);
+  private Button getButton(XboxController.Button button) {
+    return new JoystickButton(controller, button.value);
   }
 
   /**
