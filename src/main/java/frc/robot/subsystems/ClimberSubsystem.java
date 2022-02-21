@@ -14,6 +14,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.Climber;
 
 public class ClimberSubsystem extends SubsystemBase {
@@ -29,6 +30,8 @@ public class ClimberSubsystem extends SubsystemBase {
     limitSwitch = new DigitalInput(limitSwitchID);
 
     motor = new CANSparkMax(SparkMaxCANID, MotorType.kBrushless);
+    motor.restoreFactoryDefaults();
+    motor.setOpenLoopRampRate(Constants.motorRampTime);
     motor.setIdleMode(IdleMode.kBrake);
 
     encoder = motor.getEncoder();
