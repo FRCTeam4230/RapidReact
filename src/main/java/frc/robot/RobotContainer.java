@@ -80,15 +80,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     joystickButton.whenPressed(DriveDistance.create(driveSubsystem));
 
-    getButton(XboxController.Button.kA).whenPressed(new InstantCommand(driveSubsystem::resetEncoders, driveSubsystem));
-
-    getButton(XboxController.Button.kB).whenHeld(new InstantCommand(armSubsystem::raise, armSubsystem));
-    getButton(XboxController.Button.kY).whenHeld(new InstantCommand(armSubsystem::lower, armSubsystem));
-
-    getButton(XboxController.Button.kRightBumper)
-        .whenHeld(new ExtakeCommand(intakeSubsystem));
-    getButton(XboxController.Button.kLeftBumper)
-        .whenHeld(new IntakeCommand(intakeSubsystem));
+    getButton(XboxController.Button.kLeftBumper).whenHeld(new InstantCommand(armSubsystem::raise, armSubsystem));
+    getButton(XboxController.Button.kRightBumper).whenHeld(new InstantCommand(armSubsystem::lower, armSubsystem));
 
     CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, teleopCommand);
 
