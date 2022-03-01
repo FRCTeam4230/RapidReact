@@ -52,6 +52,14 @@ public class ClimberSubsystem extends SubsystemBase {
     setSpeed(0);
   }
 
+  public void resetEncoder() {
+    encoder.setPosition(0);
+  }
+
+  public boolean atLimit() {
+    return !limitSwitch.get();
+  }
+
   private boolean canUseSpeed(double speed) {
     if (limitSwitch.get() || speed == 0) {
       return true; // no issues because not triggering limit switch or trying to stop

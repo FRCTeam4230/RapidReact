@@ -18,6 +18,7 @@ import frc.robot.Constants.DigitalIOIDs;
 import frc.robot.Constants.MotorID;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.ManualClimbCommand;
+import frc.robot.commands.ResetClimbers;
 import frc.robot.commands.TeleopCommand;
 import frc.robot.commands.TurnCommand;
 import frc.robot.commands.intake.ExtakeCommand;
@@ -112,5 +113,11 @@ public class RobotContainer {
   private Command createAutoComamand() {
     return new TurnCommand(driveSubsystem, 10);
     // return new AutoCommand(driveSubsystem, intakeSubsystem);
+  }
+
+  private final ResetClimbers resetClimbers = new ResetClimbers(leftClimberSubsystem, rightClimberSubsystem);
+
+  public Command getTestCommand() {
+    return resetClimbers;
   }
 }

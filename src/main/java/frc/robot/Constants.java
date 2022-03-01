@@ -59,6 +59,7 @@ public final class Constants {
   }
 
   public final class Climber {
+    public static final int resetDirection = 1;
     public static final double highLimit = 10;
 
     public static final double speed = 0.8;
