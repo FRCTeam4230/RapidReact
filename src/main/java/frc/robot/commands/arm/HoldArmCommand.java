@@ -23,16 +23,12 @@ public class HoldArmCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    moveUp();
-  }
-
-  private void moveUp() {
-    armSubsystem.setSpeed(Intake.holdSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    armSubsystem.setSpeed(armSubsystem.isUp() ? Intake.upHoldSpeed : Intake.holdSpeed);
   }
 
   // Called once the command ends or is interrupted.

@@ -39,7 +39,7 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if ((isUp() && motor.get() > Intake.holdSpeed) || (isDown() && motor.get() < 0)) {
+    if ((isUp() && motor.get() > Intake.upHoldSpeed) || (isDown() && motor.get() < 0)) {
       stop();
     }
   }
@@ -72,5 +72,6 @@ public class ArmSubsystem extends SubsystemBase {
     builder.addBooleanProperty("lower limit", lowerLimitSwitch::get, null);
     builder.addBooleanProperty("upper limit", upperLimitSwitch::get, null);
     builder.addDoubleProperty("hold speed", () -> Intake.holdSpeed, n -> Intake.holdSpeed = n);
+    builder.addDoubleProperty("upper hold speed", () -> Intake.upHoldSpeed, n -> Intake.upHoldSpeed = n);
   }
 }

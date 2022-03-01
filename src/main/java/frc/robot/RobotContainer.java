@@ -83,7 +83,8 @@ public class RobotContainer {
     joystickButton.whenPressed(DriveDistance.create(driveSubsystem));
 
     getButton(XboxController.Button.kLeftBumper).whenHeld(new LowerArmCommand(armSubsystem));
-    getButton(XboxController.Button.kRightBumper).whenHeld(new RaiseArmCommand(armSubsystem));
+    getButton(XboxController.Button.kRightBumper)
+        .whenHeld(new RaiseArmCommand(armSubsystem)).whenReleased(new HoldArmCommand(armSubsystem));//.andThen(new HoldArmCommand(armSubsystem)));
 
     CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, teleopCommand);
 
@@ -92,7 +93,7 @@ public class RobotContainer {
 
     CommandScheduler.getInstance().setDefaultCommand(intakeSubsystem, intakeCommand);
 
-    CommandScheduler.getInstance().setDefaultCommand(armSubsystem, new HoldArmCommand(armSubsystem));
+    // CommandScheduler.getInstance().setDefaultCommand(armSubsystem, new HoldArmCommand(armSubsystem));
   }
 
   private Button getButton(XboxController.Button button) {

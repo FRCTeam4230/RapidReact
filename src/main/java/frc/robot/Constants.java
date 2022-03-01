@@ -56,6 +56,7 @@ public final class Constants {
     public static final double downArmSpeed = -0.2;
     public static final double upArmSpeed = 0.3;
     public static double holdSpeed = 0.04;
+    public static double upHoldSpeed = 0.01;
 
     public static final double speed = 1;
   }
