@@ -52,6 +52,10 @@ public class ClimberSubsystem extends SubsystemBase {
     setSpeed(0);
   }
 
+  public void invert() {
+    motor.setInverted(true);
+  }
+
   public void resetEncoder() {
     encoder.setPosition(0);
   }
