@@ -21,8 +21,9 @@ import frc.robot.commands.ManualClimbCommand;
 import frc.robot.commands.ResetClimbers;
 import frc.robot.commands.TeleopCommand;
 import frc.robot.commands.TurnCommand;
-import frc.robot.commands.intake.ExtakeCommand;
-import frc.robot.commands.intake.IntakeCommand;
+import frc.robot.commands.arm.HoldArmCommand;
+import frc.robot.commands.arm.LowerArmCommand;
+import frc.robot.commands.arm.RaiseArmCommand;
 import frc.robot.commands.intake.ManualIntakeCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -81,8 +82,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     joystickButton.whenPressed(DriveDistance.create(driveSubsystem));
 
-    getButton(XboxController.Button.kLeftBumper).whenHeld(new InstantCommand(armSubsystem::raise, armSubsystem));
-    getButton(XboxController.Button.kRightBumper).whenHeld(new InstantCommand(armSubsystem::lower, armSubsystem));
+    getButton(XboxController.Button.kLeftBumper).whenHeld(new LowerArmCommand(armSubsystem));
+    getButton(XboxController.Button.kRightBumper).whenHeld(new RaiseArmCommand(armSubsystem));
 
     CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, teleopCommand);
 
@@ -90,6 +91,8 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(rightClimberSubsystem, rClimbCommand);
 
     CommandScheduler.getInstance().setDefaultCommand(intakeSubsystem, intakeCommand);
+
+    CommandScheduler.getInstance().setDefaultCommand(armSubsystem, new HoldArmCommand(armSubsystem));
   }
 
   private Button getButton(XboxController.Button button) {
