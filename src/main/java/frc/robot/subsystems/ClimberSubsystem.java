@@ -5,9 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -32,7 +32,7 @@ public class ClimberSubsystem extends SubsystemBase {
     motor = new CANSparkMax(SparkMaxCANID, MotorType.kBrushless);
     motor.restoreFactoryDefaults();
     motor.setOpenLoopRampRate(Constants.motorRampTime);
-    motor.setIdleMode(IdleMode.kBrake);
+    useBrake(false);
 
     encoder = motor.getEncoder();
     encoder.setPosition(0);
@@ -52,8 +52,12 @@ public class ClimberSubsystem extends SubsystemBase {
     setSpeed(0);
   }
 
-  public void invert() {
-    motor.setInverted(true);
+  public void toggleInvert() {
+    motor.setInverted(!motor.getInverted());
+  }
+
+  public void useBrake(boolean brake) {
+    motor.setIdleMode(brake ? IdleMode.kBrake : IdleMode.kCoast);
   }
 
   public void resetEncoder() {
