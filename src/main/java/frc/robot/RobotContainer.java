@@ -11,14 +11,13 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DigitalIOIDs;
 import frc.robot.Constants.MotorID;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.ManualClimbCommand;
-import frc.robot.commands.ResetClimbers;
+import frc.robot.commands.ResetClimber;
 import frc.robot.commands.TeleopCommand;
 import frc.robot.commands.TurnCommand;
 import frc.robot.commands.arm.HoldArmCommand;
@@ -61,6 +60,9 @@ public class RobotContainer {
   private final ManualClimbCommand rClimbCommand = new ManualClimbCommand(rightClimberSubsystem,
       secondController::getRightY);
 
+  private final Command resetClimbersCommand = new ResetClimber(leftClimberSubsystem)
+      .alongWith(new ResetClimber(rightClimberSubsystem));
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -68,7 +70,7 @@ public class RobotContainer {
   }
 
   public Command getTeleopCommand() {
-    return teleopCommand;
+    return resetClimbersCommand;
   }
 
   /**
@@ -85,6 +87,9 @@ public class RobotContainer {
     getButton(XboxController.Button.kLeftBumper).whenHeld(new LowerArmCommand(armSubsystem));
     getButton(XboxController.Button.kRightBumper)
         .whenHeld(new RaiseArmCommand(armSubsystem)).whenReleased(new HoldArmCommand(armSubsystem));//.andThen(new HoldArmCommand(armSubsystem)));
+
+    new JoystickButton(secondController, XboxController.Button.kX.value)
+        .whenHeld(new ResetClimber(rightClimberSubsystem));
 
     CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, teleopCommand);
 
@@ -117,11 +122,5 @@ public class RobotContainer {
   private Command createAutoComamand() {
     return new TurnCommand(driveSubsystem, 10);
     // return new AutoCommand(driveSubsystem, intakeSubsystem);
-  }
-
-  private final ResetClimbers resetClimbers = new ResetClimbers(leftClimberSubsystem, rightClimberSubsystem);
-
-  public Command getTestCommand() {
-    return resetClimbers;
   }
 }
