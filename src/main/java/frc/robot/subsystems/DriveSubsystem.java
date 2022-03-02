@@ -124,6 +124,12 @@ public class DriveSubsystem extends SubsystemBase {
     });
   }
 
+  public void setBraking(boolean brake) {
+    motors.entrySet().forEach(motor -> {
+      motor.getValue().setIdleMode(brake ? IdleMode.kBrake : IdleMode.kCoast);
+    });
+  }
+
   public void stop() {
     differentialDrive.tankDrive(0, 0);
   }
@@ -139,7 +145,9 @@ public class DriveSubsystem extends SubsystemBase {
     builder.addDoubleProperty("MG1_Encoder", this::getMg1Position, null);
     builder.addDoubleProperty("MG2_Encoder", this::getMg2Position, null);
 
-    builder.addDoubleProperty("ramp rate", () -> motors.get(MotorID.MG1_1).getOpenLoopRampRate(), null);
+    builder.addDoubleProperty("ramp rate", () -> motors.get(MotorID.MG1_1).getOpenLoopRampRate(), this::setRampTime);
+    builder.addBooleanProperty("brake mode on", () -> motors.get(MotorID.MG1_1).getIdleMode() == IdleMode.kBrake,
+        this::setBraking);
 
     builder.addDoubleProperty("angle", this::getRotation, null);
   }
