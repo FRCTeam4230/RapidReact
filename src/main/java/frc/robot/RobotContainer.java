@@ -5,6 +5,9 @@
 package frc.robot;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -119,7 +122,8 @@ public class RobotContainer {
     // return new AutoCommand(driveSubsystem, intakeSubsystem);
   }
 
-  private final Command testCommand = new ResetClimbersFull(leftClimberSubsystem, rightClimberSubsystem);
+  private final Command testCommand = new ResetClimbersFull(
+      new HashSet<>(List.of(leftClimberSubsystem, rightClimberSubsystem)));
 
   public Command getTestCommand() {
     return testCommand;
