@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.Climber;
 import frc.robot.subsystems.ClimberSubsystem;
 
@@ -27,8 +26,8 @@ public class ResetClimber extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(() -> startingPos = climber.getPosition()),
 
-        new WaitUntilCommand(() -> Math.abs(climber.getPosition() - startingPos) > Climber.resetRotations)
-            .raceWith(new MoveClimbersToBottom(climber)),
+        new MoveClimbersToBottom(climber)
+            .until(() -> Math.abs(climber.getPosition() - startingPos) > Climber.resetRotations),
 
         new ConditionalCommand(
             new InstantCommand(),
