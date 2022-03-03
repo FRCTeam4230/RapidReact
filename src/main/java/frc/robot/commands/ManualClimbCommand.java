@@ -25,20 +25,18 @@ public class ManualClimbCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    climber.useBrake(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.setSpeed(input.getAsDouble() * Climber.speed);
+    climber.setSpeed(input.getAsDouble() * Climber.speed * (climber.getPosition() - Climber.highLimit > 0 ? 1 : -1));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     climber.stop();
-    climber.useBrake(false);
   }
 
   // Returns true when the command should end.

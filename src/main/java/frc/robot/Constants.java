@@ -16,7 +16,7 @@ public final class Constants {
   public static final double motorRampTime = 0.3;
 
   public static final class DriveDistanceParams {
-    public static final double kP = 0.04;
+    public static final double kP = 0.03;
     public static final double kI = 0;
     public static final double kD = 0;
 
@@ -44,10 +44,10 @@ public final class Constants {
     public static final double motorRotationsToInches = 72 / 40.687;
 
     public static final double timeToFullSpeed = 0.5;
-    public static final double moveMult = 0.6;
+    public static final double moveMult = 0.7;
     public static final double turnMult = 0.6;
 
-    public static final double moveMult2 = 1;
+    public static final double moveMult2 = 0.9;
     public static final double turnMult2 = 0.7;
   }
 
@@ -70,7 +70,7 @@ public final class Constants {
 
     public static final double resetRotations = 15;
 
-    public static final double speed = 0.8;
+    public static final double speed = 1;
   }
 
   public class Autonomous {

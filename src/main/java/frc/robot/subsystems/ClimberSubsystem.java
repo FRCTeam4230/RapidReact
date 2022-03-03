@@ -32,7 +32,7 @@ public class ClimberSubsystem extends SubsystemBase {
     motor = new CANSparkMax(SparkMaxCANID, MotorType.kBrushless);
     motor.restoreFactoryDefaults();
     motor.setOpenLoopRampRate(Constants.motorRampTime);
-    useBrake(false);
+    useBrake(true);
 
     encoder = motor.getEncoder();
     encoder.setPosition(0);
@@ -56,7 +56,7 @@ public class ClimberSubsystem extends SubsystemBase {
     motor.setInverted(!motor.getInverted());
   }
 
-  public void useBrake(boolean brake) {
+  private void useBrake(boolean brake) {
     motor.setIdleMode(brake ? IdleMode.kBrake : IdleMode.kCoast);
   }
 

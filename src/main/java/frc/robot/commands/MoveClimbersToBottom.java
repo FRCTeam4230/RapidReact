@@ -23,7 +23,7 @@ public class MoveClimbersToBottom extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    climberSubsystem.setSpeed(Climber.speed * Climber.resetDirection);
+    climberSubsystem.setSpeed(Climber.speed * Climber.resetDirection * 0.8);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

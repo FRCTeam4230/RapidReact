@@ -6,6 +6,7 @@ package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.Autonomous;
 import frc.robot.commands.DriveDistance;
 import frc.robot.subsystems.DriveSubsystem;
@@ -16,9 +17,9 @@ public class TaxiCommand {
   }
 
   public static Command create(DriveSubsystem driveSubsystem) {
-    DriveDistance out = DriveDistance.create(driveSubsystem, Autonomous.defaultTaxiDistance);
+    CommandBase out = DriveDistance.create(driveSubsystem, Autonomous.defaultTaxiDistance).withName("Taxi command");
 
-    SmartDashboard.putData("Taxi command", out);
+    SmartDashboard.putData(out);
     return out;
   }
 }

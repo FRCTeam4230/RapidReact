@@ -7,6 +7,7 @@ package frc.robot;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,6 +24,7 @@ import frc.robot.commands.TurnCommand;
 import frc.robot.commands.arm.HoldArmCommand;
 import frc.robot.commands.arm.LowerArmCommand;
 import frc.robot.commands.arm.RaiseArmCommand;
+import frc.robot.commands.autonomous.AutoCommand;
 import frc.robot.commands.intake.ManualIntakeCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -67,6 +69,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    CameraServer.startAutomaticCapture();
   }
 
   public Command getTeleopCommand() {
@@ -120,7 +123,7 @@ public class RobotContainer {
   }
 
   private Command createAutoComamand() {
-    return new TurnCommand(driveSubsystem, 10);
-    // return new AutoCommand(driveSubsystem, intakeSubsystem);
+    // return new TurnCommand(driveSubsystem, 10);
+    return new AutoCommand(driveSubsystem, intakeSubsystem).andThen(new LowerArmCommand(armSubsystem));
   }
 }
