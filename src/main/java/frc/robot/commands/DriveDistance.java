@@ -44,8 +44,8 @@ public class DriveDistance extends CommandBase {
     this.driveSubsystem = driveSubsystem;
     addRequirements(driveSubsystem);
 
-    mg1PidController.setTolerance(DriveDistanceParams.tolerance, DriveDistanceParams.tolerance);
-    mg2PidController.setTolerance(DriveDistanceParams.tolerance, DriveDistanceParams.tolerance);
+    mg1PidController.setTolerance(DriveDistanceParams.tolerance, DriveDistanceParams.velocityTolerance);
+    mg2PidController.setTolerance(DriveDistanceParams.tolerance, DriveDistanceParams.velocityTolerance);
 
     this.distance = distance;
 

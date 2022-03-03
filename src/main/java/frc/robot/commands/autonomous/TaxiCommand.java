@@ -17,7 +17,7 @@ public class TaxiCommand {
   }
 
   public static Command create(DriveSubsystem driveSubsystem) {
-    CommandBase out = DriveDistance.create(driveSubsystem, Autonomous.defaultTaxiDistance).withName("Taxi command");
+    CommandBase out = DriveDistance.create(driveSubsystem, Autonomous.defaultTaxiDistance).withName("Taxi command").withTimeout(8);
 
     SmartDashboard.putData(out);
     return out;

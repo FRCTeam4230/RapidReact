@@ -22,7 +22,7 @@ public final class Constants {
 
     public static final double baseSpeed = 0.02;
 
-    public static final double tolerance = 0.25;
+    public static final double tolerance = 1;
     public static final double velocityTolerance = 0.2;
   }
 
