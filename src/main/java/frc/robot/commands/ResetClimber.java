@@ -17,21 +17,25 @@ import frc.robot.subsystems.ClimberSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ResetClimber extends SequentialCommandGroup {
   /** Creates a new ResetClimbersFull. */
+
+  private double startingPos;
+
   public ResetClimber(ClimberSubsystem climber) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-        new InstantCommand(climber::resetEncoder, climber),
 
-        new WaitUntilCommand(() -> Math.abs(climber.getPosition()) > Climber.resetRotations)
+    addCommands(
+        new InstantCommand(() -> startingPos = climber.getPosition()),
+
+        new WaitUntilCommand(() -> Math.abs(climber.getPosition() - startingPos) > Climber.resetRotations)
             .raceWith(new MoveClimbersToBottom(climber)),
 
         new ConditionalCommand(
             new InstantCommand(),
-            new InstantCommand(climber::toggleInvert, climber).andThen(new MoveClimbersToBottom(climber)),
-            climber::atLimit),
-
-        new InstantCommand(climber::resetEncoder, climber));
+            new InstantCommand(climber::toggleInvert, climber)
+                .andThen(new MoveClimbersToBottom(climber))
+                .andThen(new InstantCommand(climber::resetEncoder, climber)),
+            climber::atLimit));
 
     SmartDashboard.putData(this);
   }
