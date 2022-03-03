@@ -31,7 +31,7 @@ public class ManualClimbCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.setSpeed(input.getAsDouble() * Climber.speed);
+    climber.setSpeed(input.getAsDouble() * Climber.speed * (climber.getPosition() - Climber.highLimit > 0 ? 1 : -1));
   }
 
   // Called once the command ends or is interrupted.
