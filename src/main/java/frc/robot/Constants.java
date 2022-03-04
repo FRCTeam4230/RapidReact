@@ -44,11 +44,13 @@ public final class Constants {
     public static final double motorRotationsToInches = 72 / 40.687;
 
     public static final double timeToFullSpeed = 0.5;
-    public static final double moveMult = 0.7;
-    public static final double turnMult = 0.6;
+    public static final double moveMult = 0.8;
+    public static final double turnMult = 0.5;
 
     public static final double moveMult2 = 0.9;
     public static final double turnMult2 = 0.7;
+
+    public static final double accelTime = 0.7;
   }
 
   public static class Intake {
@@ -59,7 +61,7 @@ public final class Constants {
     public static final double downArmSpeed = -0.2;
     public static final double upArmSpeed = 0.3;
     public static double holdSpeed = 0.04;
-    public static double upHoldSpeed = 0.01;
+    public static double upHoldSpeed = 0.0;
 
     public static final double speed = 1;
   }

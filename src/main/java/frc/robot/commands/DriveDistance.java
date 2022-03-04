@@ -49,7 +49,7 @@ public class DriveDistance extends CommandBase {
 
     this.distance = distance;
 
-    SmartDashboard.putData("drive dist " + distance, this);
+    SmartDashboard.putData(this);
   }
 
   public static final DriveDistance create(DriveSubsystem driveSubsystem) {

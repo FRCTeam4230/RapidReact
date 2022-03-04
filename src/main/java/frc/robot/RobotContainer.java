@@ -20,7 +20,6 @@ import frc.robot.commands.DriveDistance;
 import frc.robot.commands.ManualClimbCommand;
 import frc.robot.commands.ResetClimber;
 import frc.robot.commands.TeleopCommand;
-import frc.robot.commands.TurnCommand;
 import frc.robot.commands.arm.HoldArmCommand;
 import frc.robot.commands.arm.LowerArmCommand;
 import frc.robot.commands.arm.RaiseArmCommand;
@@ -32,9 +31,12 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
@@ -65,7 +67,9 @@ public class RobotContainer {
   private final Command resetClimbersCommand = new ResetClimber(leftClimberSubsystem)
       .alongWith(new ResetClimber(rightClimberSubsystem));
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
@@ -77,9 +81,11 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+   * it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private final JoystickButton joystickButton = new JoystickButton(controller, XboxController.Button.kX.value);
@@ -89,7 +95,8 @@ public class RobotContainer {
 
     getButton(XboxController.Button.kLeftBumper).whenHeld(new LowerArmCommand(armSubsystem));
     getButton(XboxController.Button.kRightBumper)
-        .whenHeld(new RaiseArmCommand(armSubsystem)).whenReleased(new HoldArmCommand(armSubsystem));//.andThen(new HoldArmCommand(armSubsystem)));
+        .whenHeld(new RaiseArmCommand(armSubsystem)).whenReleased(new HoldArmCommand(armSubsystem));// .andThen(new
+                                                                                                    // HoldArmCommand(armSubsystem)));
 
     new JoystickButton(secondController, XboxController.Button.kX.value)
         .whenHeld(new ResetClimber(rightClimberSubsystem));
@@ -101,7 +108,8 @@ public class RobotContainer {
 
     CommandScheduler.getInstance().setDefaultCommand(intakeSubsystem, intakeCommand);
 
-    // CommandScheduler.getInstance().setDefaultCommand(armSubsystem, new HoldArmCommand(armSubsystem));
+    // CommandScheduler.getInstance().setDefaultCommand(armSubsystem, new
+    // HoldArmCommand(armSubsystem));
   }
 
   private Button getButton(XboxController.Button button) {

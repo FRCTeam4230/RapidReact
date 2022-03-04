@@ -36,7 +36,7 @@ public class TeleopCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveSubsystem.setRampTime(1);
+    driveSubsystem.setRampTime(DriveTrain.accelTime);
     speedToggled = false;
   }
 
