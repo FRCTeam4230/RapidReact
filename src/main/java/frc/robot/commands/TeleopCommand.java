@@ -17,6 +17,10 @@ public class TeleopCommand extends CommandBase {
 
   public static double moveMult = DriveTrain.moveMult;
   public static double turnMult = DriveTrain.turnMult;
+  public static double moveMult2 = DriveTrain.moveMult2;
+  public static double turnMult2 = DriveTrain.turnMult2;
+
+  private boolean speedToggled;
 
   /** Creates a new TeleopCommand. */
   public TeleopCommand(DriveSubsystem driveSubsystem, XboxController controller) {
@@ -32,14 +36,19 @@ public class TeleopCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveSubsystem.setRampTime(1);
+    driveSubsystem.setRampTime(DriveTrain.accelTime);
+    speedToggled = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSubsystem.arcadeDrive(controller.getLeftY() * moveMult,
-        controller.getRightX() * turnMult);
+    if (controller.getBButtonPressed()) {
+      speedToggled = !speedToggled;
+    }
+
+    driveSubsystem.arcadeDrive(controller.getLeftY() * (!speedToggled ? moveMult : moveMult2),
+        controller.getRightX() * (!speedToggled ? turnMult : turnMult2));
   }
 
   // Called once the command ends or is interrupted.
@@ -61,5 +70,8 @@ public class TeleopCommand extends CommandBase {
 
     builder.addDoubleProperty("move speed", () -> moveMult, s -> moveMult = s);
     builder.addDoubleProperty("turn speed", () -> turnMult, s -> turnMult = s);
+
+    builder.addDoubleProperty("move speed 2", () -> moveMult2, s -> moveMult2 = s);
+    builder.addDoubleProperty("turn speed 2", () -> turnMult2, s -> turnMult2 = s);
   }
 }

@@ -25,15 +25,6 @@ public class ArmSubsystem extends SubsystemBase {
   private final DigitalInput lowerLimitSwitch = new DigitalInput(DigitalIOIDs.lowerArmLimit);
   private final DigitalInput upperLimitSwitch = new DigitalInput(DigitalIOIDs.upperArmLimit);
 
-  public enum State {
-    MOVING_UP,
-    MOVING_DOWN,
-    UP,
-    DOWN;
-  }
-
-  private State state = !lowerLimitSwitch.get() ? State.DOWN : State.UP;
-
   /** Creates a new InakteSubsystem. */
   public ArmSubsystem() {
     super();
@@ -48,35 +39,29 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (state == State.MOVING_UP && !upperLimitSwitch.get()) {
-      state = State.UP;
-      motor.stopMotor();
-    } else if (state == State.MOVING_DOWN && !lowerLimitSwitch.get()) {
-      state = State.DOWN;
-      motor.stopMotor();
+    if ((isUp() && motor.get() > Intake.upHoldSpeed) || (isDown() && motor.get() < 0)) {
+      stop();
     }
   }
 
-  public void lower() {
-    if (state == State.DOWN)
-      return;
-    state = State.MOVING_DOWN;
-    motor.set(Intake.downArmSpeed);
+  public void stop() {
+    setSpeed(0);
   }
 
-  public void raise() {
-    if (state == State.UP)
-      return;
-    state = State.MOVING_UP;
-    motor.set(Intake.upArmSpeed);
+  public void setSpeed(double speed) {
+    motor.set(speed);
+  }
+
+  public boolean isUp() {
+    return !upperLimitSwitch.get();
+  }
+
+  public boolean isDown() {
+    return !lowerLimitSwitch.get();
   }
 
   public double getPosition() {
     return encoder.getPosition();
-  }
-
-  public State getState() {
-    return state;
   }
 
   @Override
@@ -84,8 +69,9 @@ public class ArmSubsystem extends SubsystemBase {
     super.initSendable(builder);
 
     builder.addDoubleProperty("encoder postion", this::getPosition, encoder::setPosition);
-    builder.addStringProperty("state", () -> getState().toString(), null);
     builder.addBooleanProperty("lower limit", lowerLimitSwitch::get, null);
     builder.addBooleanProperty("upper limit", upperLimitSwitch::get, null);
+    builder.addDoubleProperty("hold speed", () -> Intake.holdSpeed, n -> Intake.holdSpeed = n);
+    builder.addDoubleProperty("upper hold speed", () -> Intake.upHoldSpeed, n -> Intake.upHoldSpeed = n);
   }
 }

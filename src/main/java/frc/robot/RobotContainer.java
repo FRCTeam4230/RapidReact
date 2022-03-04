@@ -7,21 +7,23 @@ package frc.robot;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DigitalIOIDs;
 import frc.robot.Constants.MotorID;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.ManualClimbCommand;
+import frc.robot.commands.ResetClimber;
 import frc.robot.commands.TeleopCommand;
-import frc.robot.commands.TurnCommand;
-import frc.robot.commands.intake.ExtakeCommand;
-import frc.robot.commands.intake.IntakeCommand;
+import frc.robot.commands.arm.HoldArmCommand;
+import frc.robot.commands.arm.LowerArmCommand;
+import frc.robot.commands.arm.RaiseArmCommand;
+import frc.robot.commands.autonomous.AutoCommand;
 import frc.robot.commands.intake.ManualIntakeCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -29,9 +31,12 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
@@ -59,20 +64,28 @@ public class RobotContainer {
   private final ManualClimbCommand rClimbCommand = new ManualClimbCommand(rightClimberSubsystem,
       secondController::getRightY);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  private final Command resetClimbersCommand = new ResetClimber(leftClimberSubsystem)
+      .alongWith(new ResetClimber(rightClimberSubsystem));
+
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    CameraServer.startAutomaticCapture();
   }
 
   public Command getTeleopCommand() {
-    return teleopCommand;
+    return resetClimbersCommand;
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+   * it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private final JoystickButton joystickButton = new JoystickButton(controller, XboxController.Button.kX.value);
@@ -80,15 +93,13 @@ public class RobotContainer {
   private void configureButtonBindings() {
     joystickButton.whenPressed(DriveDistance.create(driveSubsystem));
 
-    getButton(XboxController.Button.kA).whenPressed(new InstantCommand(driveSubsystem::resetEncoders, driveSubsystem));
-
-    getButton(XboxController.Button.kB).whenHeld(new InstantCommand(armSubsystem::raise, armSubsystem));
-    getButton(XboxController.Button.kY).whenHeld(new InstantCommand(armSubsystem::lower, armSubsystem));
-
+    getButton(XboxController.Button.kLeftBumper).whenHeld(new LowerArmCommand(armSubsystem));
     getButton(XboxController.Button.kRightBumper)
-        .whenHeld(new ExtakeCommand(intakeSubsystem));
-    getButton(XboxController.Button.kLeftBumper)
-        .whenHeld(new IntakeCommand(intakeSubsystem));
+        .whenHeld(new RaiseArmCommand(armSubsystem)).whenReleased(new HoldArmCommand(armSubsystem));// .andThen(new
+                                                                                                    // HoldArmCommand(armSubsystem)));
+
+    new JoystickButton(secondController, XboxController.Button.kX.value)
+        .whenHeld(new ResetClimber(rightClimberSubsystem));
 
     CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, teleopCommand);
 
@@ -96,6 +107,9 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(rightClimberSubsystem, rClimbCommand);
 
     CommandScheduler.getInstance().setDefaultCommand(intakeSubsystem, intakeCommand);
+
+    // CommandScheduler.getInstance().setDefaultCommand(armSubsystem, new
+    // HoldArmCommand(armSubsystem));
   }
 
   private Button getButton(XboxController.Button button) {
@@ -117,7 +131,7 @@ public class RobotContainer {
   }
 
   private Command createAutoComamand() {
-    return new TurnCommand(driveSubsystem, 10);
-    // return new AutoCommand(driveSubsystem, intakeSubsystem);
+    // return new TurnCommand(driveSubsystem, 10);
+    return new AutoCommand(driveSubsystem, intakeSubsystem).andThen(new LowerArmCommand(armSubsystem));
   }
 }

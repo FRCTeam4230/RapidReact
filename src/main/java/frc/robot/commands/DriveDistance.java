@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -43,12 +44,12 @@ public class DriveDistance extends CommandBase {
     this.driveSubsystem = driveSubsystem;
     addRequirements(driveSubsystem);
 
-    mg1PidController.setTolerance(DriveDistanceParams.tolerance, DriveDistanceParams.tolerance);
-    mg2PidController.setTolerance(DriveDistanceParams.tolerance, DriveDistanceParams.tolerance);
+    mg1PidController.setTolerance(DriveDistanceParams.tolerance, DriveDistanceParams.velocityTolerance);
+    mg2PidController.setTolerance(DriveDistanceParams.tolerance, DriveDistanceParams.velocityTolerance);
 
     this.distance = distance;
 
-    SmartDashboard.putData("drive dist " + distance, this);
+    SmartDashboard.putData(this);
   }
 
   public static final DriveDistance create(DriveSubsystem driveSubsystem) {
@@ -74,6 +75,9 @@ public class DriveDistance extends CommandBase {
 
     mg1Output += Math.copySign(baseSpeed, mg1Output);
     mg2Output += Math.copySign(baseSpeed, mg2Output);
+
+    mg1Output = MathUtil.clamp(mg1Output, -.7, .7);
+    mg2Output = MathUtil.clamp(mg2Output, -.7, .7);
 
     driveSubsystem.setSpeeds(mg1Output, mg2Output);
     NetworkTableInstance.getDefault().getEntry("mg1Output").setDouble(mg1Output);

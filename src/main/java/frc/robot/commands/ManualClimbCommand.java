@@ -6,6 +6,8 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.Climber;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -20,6 +22,8 @@ public class ManualClimbCommand extends CommandBase {
     this.input = input;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climberSubsystem);
+
+    SmartDashboard.putData("climber control command " + climberSubsystem.getName(), this);
   }
 
   // Called when the command is initially scheduled.
@@ -30,7 +34,7 @@ public class ManualClimbCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.setSpeed(input.getAsDouble() * Climber.speed);
+    climber.setSpeed(input.getAsDouble() * Climber.speed * (climber.getPosition() - Climber.highLimit > 0 ? 1 : -1));
   }
 
   // Called once the command ends or is interrupted.
@@ -43,5 +47,12 @@ public class ManualClimbCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    super.initSendable(builder);
+
+    builder.addDoubleProperty("input", input, null);
   }
 }
