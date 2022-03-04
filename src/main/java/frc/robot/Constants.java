@@ -45,7 +45,7 @@ public final class Constants {
 
     public static final double timeToFullSpeed = 0.5;
     public static final double moveMult = 0.8;
-    public static final double turnMult = 0.5;
+    public static final double turnMult = 0.6;
 
     public static final double moveMult2 = 0.9;
     public static final double turnMult2 = 0.7;
@@ -72,7 +72,7 @@ public final class Constants {
 
     public static final double resetRotations = 15;
 
-    public static final double speed = 1;
+    public static final double speed = 0.9;
   }
 
   public class Autonomous {
@@ -87,7 +87,6 @@ public final class Constants {
     public static final int rightClimber = 6;
     public static final List<Integer> dirveGroup1 = Arrays.asList(1,2);
     public static final List<Integer> driveGroup2 = Arrays.asList(3, 4 );
-  }
   */
 
   public enum MotorID {

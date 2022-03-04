@@ -47,8 +47,9 @@ public class RobotContainer {
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   private final ClimberSubsystem leftClimberSubsystem = new ClimberSubsystem(MotorID.LEFT_CLIMBER.getId(),
       DigitalIOIDs.leftClimber);
-  private final ClimberSubsystem rightClimberSubsystem = new ClimberSubsystem(MotorID.RIGHT_CLIMBER.getId(),
-      DigitalIOIDs.rightClimber);
+  // private final ClimberSubsystem rightClimberSubsystem = new
+  // ClimberSubsystem(MotorID.RIGHT_CLIMBER.getId(),
+  // DigitalIOIDs.rightClimber);
   private final XboxController controller = new XboxController(0);
   private final XboxController secondController = new XboxController(1);
 
@@ -61,11 +62,12 @@ public class RobotContainer {
 
   private final ManualClimbCommand lClimbCommand = new ManualClimbCommand(leftClimberSubsystem,
       secondController::getLeftY);
-  private final ManualClimbCommand rClimbCommand = new ManualClimbCommand(rightClimberSubsystem,
-      secondController::getRightY);
+  // private final ManualClimbCommand rClimbCommand = new
+  // ManualClimbCommand(rightClimberSubsystem,
+  // secondController::getRightY);
 
-  private final Command resetClimbersCommand = new ResetClimber(leftClimberSubsystem)
-      .alongWith(new ResetClimber(rightClimberSubsystem));
+  private final Command resetClimbersCommand = new ResetClimber(leftClimberSubsystem);
+  // new ResetClimber(rightClimberSubsystem);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -98,13 +100,11 @@ public class RobotContainer {
         .whenHeld(new RaiseArmCommand(armSubsystem)).whenReleased(new HoldArmCommand(armSubsystem));// .andThen(new
                                                                                                     // HoldArmCommand(armSubsystem)));
 
-    new JoystickButton(secondController, XboxController.Button.kX.value)
-        .whenHeld(new ResetClimber(rightClimberSubsystem));
-
     CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, teleopCommand);
 
     CommandScheduler.getInstance().setDefaultCommand(leftClimberSubsystem, lClimbCommand);
-    CommandScheduler.getInstance().setDefaultCommand(rightClimberSubsystem, rClimbCommand);
+    // CommandScheduler.getInstance().setDefaultCommand(rightClimberSubsystem,
+    // rClimbCommand);
 
     CommandScheduler.getInstance().setDefaultCommand(intakeSubsystem, intakeCommand);
 
