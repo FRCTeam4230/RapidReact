@@ -79,6 +79,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     resetEncoders();
     setRampTime(DriveTrain.timeToFullSpeed);
+    setBraking(true);
 
     SmartDashboard.putData(this);
 
