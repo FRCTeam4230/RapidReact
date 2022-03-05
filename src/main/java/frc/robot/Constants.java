@@ -18,7 +18,7 @@ public final class Constants {
   public static final class DriveDistanceParams {
     public static final double kP = 0.03;
     public static final double kI = 0;
-    public static final double kD = 0;
+    public static final double kD = 0.005;
 
     public static final double baseSpeed = 0.02;
 
@@ -61,7 +61,7 @@ public final class Constants {
     public static final double downArmSpeed = -0.2;
     public static final double upArmSpeed = 0.3;
     public static double holdSpeed = 0.04;
-    public static double upHoldSpeed = 0.0;
+    public static double upHoldSpeed = 0.01;
 
     public static final double speed = 1;
   }
@@ -73,6 +73,8 @@ public final class Constants {
     public static final double resetRotations = 15;
 
     public static final double speed = 0.9;
+    public static final double rightSpeedMult = 4.0 / 5.0;
+    public static final double leftSpeedMult = 1;
   }
 
   public class Autonomous {
