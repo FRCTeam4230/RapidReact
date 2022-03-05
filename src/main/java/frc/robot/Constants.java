@@ -55,7 +55,7 @@ public final class Constants {
 
   public static class Intake {
     public final class Limits {
-      public static final double up = 1;
+      public static final double up = 21.3;
     }
 
     public static final double downArmSpeed = -0.2;
