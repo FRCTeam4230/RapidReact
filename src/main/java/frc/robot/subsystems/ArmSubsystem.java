@@ -42,10 +42,18 @@ public class ArmSubsystem extends SubsystemBase {
     if ((isUp() && motor.get() > Intake.upHoldSpeed) || (isDown() && motor.get() < 0)) {
       stop();
     }
+
+    if (isDown()) {
+      resetEncoder();
+    }
   }
 
   public void stop() {
     setSpeed(0);
+  }
+
+  public void resetEncoder() {
+    encoder.setPosition(0);
   }
 
   public void setSpeed(double speed) {
@@ -53,7 +61,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public boolean isUp() {
-    return !upperLimitSwitch.get();
+    return !upperLimitSwitch.get() || getPosition() >= Intake.Limits.up;
   }
 
   public boolean isDown() {

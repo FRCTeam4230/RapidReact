@@ -20,11 +20,13 @@ import frc.robot.Constants.Climber;
 public class ClimberSubsystem extends SubsystemBase {
   private final DigitalInput limitSwitch;
 
+  private final double speedMult;
+
   private final CANSparkMax motor;
   private final RelativeEncoder encoder;
 
   /** Creates a new ClimberSubsystem. */
-  public ClimberSubsystem(int SparkMaxCANID, int limitSwitchID) {
+  public ClimberSubsystem(int SparkMaxCANID, int limitSwitchID, double speedMult) {
     super();
 
     limitSwitch = new DigitalInput(limitSwitchID);
@@ -38,6 +40,8 @@ public class ClimberSubsystem extends SubsystemBase {
     encoder.setPosition(0);
 
     SmartDashboard.putData("climber on motor " + motor.getDeviceId(), this);
+
+    this.speedMult = speedMult;
   }
 
   @Override
@@ -80,7 +84,7 @@ public class ClimberSubsystem extends SubsystemBase {
     if (!canUseSpeed(speed)) {
       return;
     }
-    motor.set(MathUtil.clamp(speed, -1, 1));
+    motor.set(MathUtil.clamp(speed, -1, 1) * speedMult);
   }
 
   public double getPosition() {

@@ -25,7 +25,7 @@ public abstract class AbstractArmCommand extends CommandBase {
   }
 
   private final Direction mDirection;
-  private final ArmSubsystem armSubsystem;
+  protected final ArmSubsystem armSubsystem;
 
   protected AbstractArmCommand(ArmSubsystem armSubsystem, Direction direction) {
     this.armSubsystem = armSubsystem;
