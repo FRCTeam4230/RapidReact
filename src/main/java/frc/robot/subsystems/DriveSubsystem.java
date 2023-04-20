@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,8 +49,11 @@ public class DriveSubsystem extends SubsystemBase {
     return motor;
   };
 
-  public DriveSubsystem(List<MotorID> motorIds) {
-    super();
+  List<MotorID> motorIds;
+
+  public DriveSubsystem() {
+
+    motorIds = Arrays.asList(MotorID.MG1_1, MotorID.MG1_2, MotorID.MG2_1, MotorID.MG2_2);
 
     motorIds.forEach(motorId -> {
 
@@ -58,10 +62,14 @@ public class DriveSubsystem extends SubsystemBase {
       motorEncoders.put(motorId, controller.getEncoder());
 
       switch (motorId) {
+        //Don't invert this group
         case MG1_1:
         case MG1_2:
 
+          controller.setInverted(false);
           break;
+        
+        //Invert this group
         case MG2_1:
         case MG2_2:
           controller.setInverted(true);
@@ -81,9 +89,9 @@ public class DriveSubsystem extends SubsystemBase {
     setRampTime(DriveTrain.timeToFullSpeed);
     setBraking(true);
 
-    SmartDashboard.putData(this);
-
     navx.calibrate();
+
+    SmartDashboard.putData(this);
   }
 
   @Override
@@ -91,14 +99,17 @@ public class DriveSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  //Code for arcade drive, but the inputs are squared
   public void arcadeDrive(double speed, double rotations, boolean squareInputs) {
     differentialDrive.arcadeDrive(speed, rotations, true);
   }
 
+  //Arcade drive without squaring inputs
   public void arcadeDrive(double speed, double rotations) {
     differentialDrive.arcadeDrive(speed, rotations);
   }
 
+  //Code for tank drive
   public void setSpeeds(double mg1Speed, double mg2Speed) {
     differentialDrive.tankDrive(mg1Speed, mg2Speed, false);
   }

@@ -25,13 +25,12 @@ public class ArmSubsystem extends SubsystemBase {
   private final DigitalInput lowerLimitSwitch = new DigitalInput(DigitalIOIDs.lowerArmLimit);
   private final DigitalInput upperLimitSwitch = new DigitalInput(DigitalIOIDs.upperArmLimit);
 
-  /** Creates a new InakteSubsystem. */
   public ArmSubsystem() {
     super();
 
     motor.restoreFactoryDefaults();
     motor.setIdleMode(IdleMode.kBrake);
-    motor.setOpenLoopRampRate(Constants.motorRampTime);
+    motor.setOpenLoopRampRate(Constants.MOTOR_RAMP_TIME);
 
     SmartDashboard.putData(this);
   }
@@ -61,6 +60,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public boolean isUp() {
+    //Soft limit with encoders in addition to magnetic limit switch
     return !upperLimitSwitch.get() || getPosition() >= Intake.Limits.up;
   }
 

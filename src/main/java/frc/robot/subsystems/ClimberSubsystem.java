@@ -33,7 +33,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     motor = new CANSparkMax(SparkMaxCANID, MotorType.kBrushless);
     motor.restoreFactoryDefaults();
-    motor.setOpenLoopRampRate(Constants.motorRampTime);
+    motor.setOpenLoopRampRate(Constants.MOTOR_RAMP_TIME);
     useBrake(true);
 
     encoder = motor.getEncoder();
@@ -77,6 +77,7 @@ public class ClimberSubsystem extends SubsystemBase {
       return true; // no issues because not triggering limit switch or trying to stop
     }
 
+    //What does this line mean?
     return Math.signum(speed) != Math.signum(encoder.getPosition() - Climber.highLimit);
   }
 

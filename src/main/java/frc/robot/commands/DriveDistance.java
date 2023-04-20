@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
@@ -25,11 +21,6 @@ public class DriveDistance extends CommandBase {
 
   public Double getDistance() {
     return distance;
-  }
-
-  private DriveDistance setDistance(Double distance) {
-    this.distance = distance;
-    return this;
   }
 
   private Double baseSpeed = DriveDistanceParams.baseSpeed;

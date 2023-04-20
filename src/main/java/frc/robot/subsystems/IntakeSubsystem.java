@@ -21,7 +21,7 @@ public class IntakeSubsystem extends SubsystemBase {
     super();
 
     motor.configFactoryDefault();
-    motor.configOpenloopRamp(Constants.motorRampTime);
+    motor.configOpenloopRamp(Constants.MOTOR_RAMP_TIME);
 
     SmartDashboard.putData(this);
   }
